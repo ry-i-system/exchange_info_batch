@@ -3,12 +3,17 @@
 ### 概要
 
 このプログラムは以下バッチを動作させるものです。
-Pythonのバージョンは3.8.xです。
 
 * ビットコインの最新レート取得
 * テーブル作成／定義変更
 * 自作ライブラリの単体テスト
- 
+
+### 推奨動作環境
+
+* OS     : CentOS 7
+* DB     : MariaDB 5.5
+* Python : 3.8
+
 ### ファイルの配置
 
 ```
@@ -33,16 +38,13 @@ app_home/
 ### バッチ実行方法
 
 * `gmo_get_latest_rate.py`の場合
-
-```shell
-cd $app_home
-python3 bin/gmo_get_latest_rate.py -f gmo
+```
+$ cd $app_home
+$ python3 bin/gmo_get_latest_rate.py -f gmo
 ```
 
-* `migration.py`の場合
-
-```shell
-cd $app_home
-# 引数は migration/ に格納したSQLファイル名（拡張子.sqlは除く）
-python3 bin/migration.py -f SQLファイル名
+* `migration.py`の場合 (引数は migration/ に格納したSQLファイル名　※拡張子.sqlは除く)
+```
+$ cd $app_home
+$ python3 bin/migration.py -f "sql_file_name"
 ```
