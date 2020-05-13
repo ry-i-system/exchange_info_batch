@@ -13,20 +13,20 @@
 ```
 app_home/
        ├ bin/
-           ├  migration.py   # テーブル作成／定義変更
+           ├  migration.py             # テーブル作成／定義変更
        │   └  gmo_get_latest_rate.py   # 最新レート取得
        ├ conf/
-       │   └  config.py # DB接続設定情報・RESTAPI接続情報
+       │   └  config.py                # DB接続設定情報・RESTAPI接続情報
        ├ lib/
-       │   ├  __init__.py    # モジュールをロードするのに必要
-       │   ├  db_access.py      # DB接続ライブラリ
-       │   └  gmo_api.py      # RESTAPI接続ライブラリ
+       │   ├  __init__.py              # モジュールをロードするのに必要
+       │   ├  db_access.py             # DB接続ライブラリ
+       │   └  gmo_api.py               # RESTAPI接続ライブラリ
        ├ tests/        
-       │   └  test_*.py   # 単体テストコード
+       │   └  test_*.py                # 単体テストコード
        ├ migration/        
-       │   └  *.sql   # テーブル作成／定義変更SQLファイル
-       ├ log/                # ログ出力先
-       └ Pipfile             # 使うライブラリを列挙
+       │   └  *.sql                    # テーブル作成／定義変更SQLファイル
+       ├ log/                          # ログ出力先
+       └ Pipfile                       # 使うライブラリを列挙
 ```
 
 ### バッチ実行方法
@@ -42,5 +42,6 @@ python3 bin/gmo_get_latest_rate.py -f gmo
 
 ```shell
 cd $app_home
-python3 bin/migration.py -f SQLファイル名　# migration/ に格納したSQLファイル名（拡張子.sqlは除く）
+# 引数は migration/ に格納したSQLファイル名（拡張子.sqlは除く）
+python3 bin/migration.py -f SQLファイル名
 ```
