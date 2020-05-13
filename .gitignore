@@ -3,4 +3,3 @@ log/*.log
 .vscode
 .vscode/*
 Pipfile.lock
-log/*
