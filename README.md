@@ -10,9 +10,9 @@
 
 ### 推奨動作環境
 
-* OS     : CentOS 7
-* DB     : MariaDB 5.5
-* Python : 3.8
+|OS|DB|言語|
+|:---|:---|:---|
+|CentOS 7|MariaDB 5.5|Python 3.8|
 
 ### ファイルの配置
 
