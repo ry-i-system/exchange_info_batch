@@ -1,5 +1,6 @@
 # ################################
-# 処理名：DBテーブル作成／定義変更
+# 取引所：GMOコイン
+# 処理名：ビットコイン最新レート取得
 # 作成日：2020/04/30
 # ################################
 
@@ -15,12 +16,13 @@ sys.path.append(os.path.join(app_home))
 
 # 自前のライブラリをロード
 from lib.db_access import DbAccess as DA
+from lib.gmo_api import GmoApi as GA
 
 # コマンドライン引数のハンドリング. must_argは必須オプション、optional_argは任意オプション
 @click.command()
 @click.option('--must_arg', '-f', required=True)
 @click.option('--optional_arg','-o',default="None")
-def migration(must_arg,optional_arg):
+def gmoGetLatestRate(must_arg,optional_arg):
     # 自身の名前から拡張子を除いてプログラム名(${prog_name})にする
     prog_name = os.path.splitext(os.path.basename(__file__))[0]
 
@@ -49,14 +51,39 @@ def migration(must_arg,optional_arg):
         logger.info(f"must_arg = {must_arg}")
         logger.info(f"optional_arg = {optional_arg}")
 
-        # SQL取得
-        f = open(app_home + "/migration/" + f"{must_arg}" + ".sql")
-        data = f.read()
-        sql = data.replace('\n','')
-        f.close()
+        # 取引所ステータス取得
+        status = GA.exStatus()
 
-        logger.info(DA.dbMigrate(sql))
+        # 取引所がOPENの場合
+        if status == "OPEN":
+            logger.info("The exchange is open.")
+            logger.info("Start getting the latest rate.")
+            latestRateJson = GA.latestRate("BTC_JPY")
 
+            # 登録データ定義
+            ex_cd = f"{must_arg}"
+            ask = latestRateJson['data'][0]['ask']
+            bid = latestRateJson['data'][0]['bid']
+            high = latestRateJson['data'][0]['high']
+            last = latestRateJson['data'][0]['last']
+            low = latestRateJson['data'][0]['low']
+            symbol = latestRateJson['data'][0]['symbol']
+            volume = latestRateJson['data'][0]['volume']
+            val = [ex_cd, ask, bid, high, last, low, symbol, volume]
+            logger.info("Acquisition of the latest rate has been completed.")
+
+            # DB接続
+            logger.info("Start DB registration.")
+            # SQL
+            sql = "INSERT INTO eip_latest_rate (ex_cd, ask, bid, high, last, low, symbol, volume) VALUES (%s, %s, %s, %s, %s, %s, %s, %s)"
+
+            res = DA.dbAccess(sql, val)
+            logger.info("DB registration completed.")
+        else:
+            logger.warning("The exchange is not open.")
+
+        # 処理終了
+        logger.info("End processing.")
         # ログ出力
         logger.info("----- end -----")
         sys.exit(0)
@@ -69,4 +96,4 @@ def migration(must_arg,optional_arg):
         sys.exit(1)
 
 if __name__ == '__main__':
-    migration()
+    gmoGetLatestRate()

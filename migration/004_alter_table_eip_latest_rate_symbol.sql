@@ -1,0 +1,1 @@
+ALTER TABLE eip_latest_rate MODIFY symbol VARCHAR(7) NOT NULL
