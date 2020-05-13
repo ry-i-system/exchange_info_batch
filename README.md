@@ -85,6 +85,8 @@ $ python bin/migration.py -f "sql_file_name"
 
 ### 単体テスト実行方法
 
+OK が表示されればテスト実行は成功です。
+
 * `test_file_name.py`の場合
 ```
 $ cd $app_home
@@ -95,4 +97,9 @@ $ python tests/test_file_name.py
 ```
 $ cd $app_home
 $ python -m unittest discover tests "test_*.py"
+...
+----------------------------------------------------------------------
+Ran 3 tests in 0.292s
+
+OK
 ```
