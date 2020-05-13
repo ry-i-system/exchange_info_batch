@@ -37,10 +37,19 @@ app_home/
 
 ### デプロイ手順
 
-* アプリケーションを格納するディレクトリに移動し、Gitリポジトリをクローン
+1. アプリケーションを格納するディレクトリに移動し、Gitリポジトリをクローン
 ```
 $ cd $app_home
 $ git clone https://github.com/ry-i-system/exchange_info_batch.git
+$ pip install pipenv
+$ pipenv install
+$ pipenv shell
+```
+2. 必要なPythonライブラリをインストール
+```
+$ pip install pipenv
+$ pipenv install
+$ pipenv shell
 ```
 
 ### 設定情報記述
@@ -65,13 +74,13 @@ class EndpointConf(object):
 * `get_latest_rate.py`の場合
 ```
 $ cd $app_home
-$ python3 bin/get_latest_rate.py -f gmo
+$ python bin/get_latest_rate.py -f gmo
 ```
 
 * `migration.py`の場合 (引数は migration/ に格納したSQLファイル名　※拡張子.sqlは除く)
 ```
 $ cd $app_home
-$ python3 bin/migration.py -f "sql_file_name"
+$ python bin/migration.py -f "sql_file_name"
 ```
 
 ### 単体テスト実行方法
@@ -79,11 +88,11 @@ $ python3 bin/migration.py -f "sql_file_name"
 * `test_file_name.py`の場合
 ```
 $ cd $app_home
-$ python3 tests/test_file_name.py
+$ python tests/test_file_name.py
 ```
 
 * 全単体テストのファイルをまとめて実行する場合
 ```
 $ cd $app_home
-$ python3 -m unittest discover tests "test_*.py"
+$ python -m unittest discover tests "test_*.py"
 ```
