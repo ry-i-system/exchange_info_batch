@@ -6,13 +6,19 @@ app_home = os.path.abspath(os.path.join( os.path.dirname(os.path.abspath(__file_
 sys.path.append(os.path.join(app_home,"lib"))
 
 # ../テスト対象のライブラリのロード
-from my_lib import MyLib
+from db_access import DbAccess as DA
 
-class TestMyLib(unittest.TestCase):
+class TestDbSelect(unittest.TestCase):
 
-    def test_get_name(self):
-        ml = MyLib()
-        self.assertEqual(ml.get_name(), "my_lib")
+    def test_dbSelect(self):
+        # SQL文
+        sql = "SELECT * FROM eip_latest_rate"
+        
+        # 想定結果
+        res_test = ()
+
+        # テスト実行
+        self.assertEqual(res_test, DA.dbSelect(sql))
 
 if __name__ == '__main__':
     unittest.main()

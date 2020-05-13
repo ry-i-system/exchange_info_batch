@@ -23,9 +23,7 @@ class DbAccess(object):
             user=DC.userId,
             passwd=DC.passWord,
             host=DC.hostName,
-            db=DC.dbName,
-            charset='utf8',
-            cursorclass=pymysql.cursors.DictCursor)
+            db=DC.dbName)
         cursor = connection.cursor()
 
         # SQL実行
