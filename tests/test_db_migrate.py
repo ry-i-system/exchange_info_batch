@@ -12,7 +12,7 @@ class TestDbMigrate(unittest.TestCase):
 
     def test_dbMigrate(self):
         # SQL取得
-        f = open(app_home + "/migration/create_table_eip_unit_test.sql")
+        f = open(app_home + "/migration/001_create_table_eip_unit_test.sql")
         data = f.read()
         sql = data.replace('\n','')
         f.close()
@@ -24,7 +24,7 @@ class TestDbMigrate(unittest.TestCase):
         self.assertEqual(res_test, DA.dbMigrate(sql))
 
         # SQL取得
-        f = open(app_home + "/migration/drop_table_eip_unit_test.sql")
+        f = open(app_home + "/migration/002_drop_table_eip_unit_test.sql")
         data = f.read()
         sql = data.replace('\n','')
         f.close()

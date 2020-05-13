@@ -12,13 +12,17 @@ class TestDbSelect(unittest.TestCase):
 
     def test_dbSelect(self):
         # SQL文
-        sql = "SELECT * FROM eip_latest_rate"
+        sql = "SELECT * FROM eip_latest_rate LIMIT 1"
         
         # 想定結果
-        res_test = ()
+        res_test = "gmo"
+
+        # DB参照
+        res = DA.dbSelect(sql)
+        data = res[0][0]
 
         # テスト実行
-        self.assertEqual(res_test, DA.dbSelect(sql))
+        self.assertEqual(res_test, data)
 
 if __name__ == '__main__':
     unittest.main()
