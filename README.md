@@ -35,6 +35,14 @@ app_home/
        └ Pipfile                       # 使うライブラリを列挙
 ```
 
+### デプロイ手順
+
+* アプリケーションを格納するディレクトリに移動し、Gitリポジトリをクローン
+```
+$ cd $app_home
+$ git clone https://github.com/ry-i-system/exchange_info_batch.git
+```
+
 ### 設定情報記述
 
 `conf/config.py`の各パラメータに記述

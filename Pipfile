@@ -8,7 +8,6 @@ verify_ssl = true
 [packages]
 mysqlclient = "*"
 requests = "*"
-json = "*"
 click = "*"
 
 [requires]
