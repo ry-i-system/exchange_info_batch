@@ -3,6 +3,7 @@
 ### 概要
 
 このプログラムは以下バッチを動作させるものです。
+Pythonのバージョンは3.8.xです。
 
 * ビットコインの最新レート取得
 * テーブル作成／定義変更
@@ -13,7 +14,7 @@
 ```
 app_home/
        ├ bin/
-           ├  migration.py             # テーブル作成／定義変更
+       │   ├  migration.py             # テーブル作成／定義変更
        │   └  gmo_get_latest_rate.py   # 最新レート取得
        ├ conf/
        │   └  config.py                # DB接続設定情報・RESTAPI接続情報
@@ -31,14 +32,14 @@ app_home/
 
 ### バッチ実行方法
 
-`gmo_get_latest_rate.py`の場合
+* `gmo_get_latest_rate.py`の場合
 
 ```shell
 cd $app_home
 python3 bin/gmo_get_latest_rate.py -f gmo
 ```
 
-`migration.py`の場合
+* `migration.py`の場合
 
 ```shell
 cd $app_home
