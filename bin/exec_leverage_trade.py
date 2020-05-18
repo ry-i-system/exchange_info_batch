@@ -20,9 +20,9 @@ from lib.gmo_api import GmoApi as GA
 
 # コマンドライン引数のハンドリング. must_argは必須オプション、optional_argは任意オプション
 @click.command()
-@click.option('--must_arg', '-f', required=True)
-@click.option('--optional_arg','-o',default="BTC_JPY")
-def execLeveregeTrade(must_arg,optional_arg):
+@click.option('--ex_cd', '-e', required=True)
+@click.option('--symbol','-s', required=True)
+def execLeveregeTrade(ex_cd,symbol):
     # 自身の名前から拡張子を除いてプログラム名(${prog_name})にする
     prog_name = os.path.splitext(os.path.basename(__file__))[0]
 
@@ -48,8 +48,8 @@ def execLeveregeTrade(must_arg,optional_arg):
         logger.info("----- start -----")
 
         # コマンドライン引数の利用
-        logger.info(f"must_arg = {must_arg}")
-        logger.info(f"optional_arg = {optional_arg}")
+        logger.info(f"ex_cd = {ex_cd}")
+        logger.info(f"symbol = {symbol}")
 
         # 取引所ステータス取得
         status = GA.exStatus()
@@ -59,8 +59,8 @@ def execLeveregeTrade(must_arg,optional_arg):
             logger.info("The exchange is open.")
 
             # 登録データ定義
-            ex_cd = f"{must_arg}"
-            symbol = f"{optional_arg}"
+            ex_cd = f"{ex_cd}"
+            symbol = f"{symbol}"
 
             # DB接続
             logger.info("Start: DB connection.")
@@ -131,16 +131,28 @@ def execLeveregeTrade(must_arg,optional_arg):
             logger.info("bid judgement : " + str(bid_judg))
             logger.info("End  : UP/DOWN judgement.")
 
-            # 余力取得
+            # 拘束証拠金取得
             logger.info("Start: get available amount.")
             aaJson = GA.availableAmount()
-            apl = int(aaJson['data']['actualProfitLoss']) - int(aaJson['data']['availableAmount'])
+            availableAmount = int(aaJson['data']['availableAmount'])
+            margin = int(aaJson['data']['margin'])
+            logger.info("ActualProfitLoss : " + str(aaJson['data']['actualProfitLoss']))
+            logger.info("AvailableAmount  : " + str(aaJson['data']['availableAmount']))
+            logger.info("Margin           : " + str(aaJson['data']['margin']))
+            logger.info("ProfitLoss       : " + str(aaJson['data']['profitLoss']))
             logger.info("End  : get available amount.")
 
-            # 建玉がない場合はレバレッジ取引開始
-            if apl == 0:
-                print("Start: leverage trading.")
+            # 建玉一覧取得
+            logger.info("Start: get open positions.")
+            opJson = GA.openPositions(symbol)
+            opNone = {}
+            logger.info("End  : get open positions.")
 
+            # 取引余力が10000以上・拘束証拠金が0・建玉がない場合はレバレッジ取引開始
+            if availableAmount >= 10000 and margin == 0 and opJson['data'] == opNone:
+                logger.info("Start: leverage trading.")
+
+                logger.info("End  : leverage trading.")
         else:
             logger.warning("The exchange is not open.")
 

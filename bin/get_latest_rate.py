@@ -20,9 +20,9 @@ from lib.gmo_api import GmoApi as GA
 
 # コマンドライン引数のハンドリング. must_argは必須オプション、optional_argは任意オプション
 @click.command()
-@click.option('--must_arg', '-f', required=True)
-@click.option('--optional_arg','-o',default="BTC_JPY")
-def getLatestRate(must_arg,optional_arg):
+@click.option('--ex_cd', '-e', required=True)
+@click.option('--symbol','-s', required=True)
+def getLatestRate(ex_cd,symbol):
     # 自身の名前から拡張子を除いてプログラム名(${prog_name})にする
     prog_name = os.path.splitext(os.path.basename(__file__))[0]
 
@@ -48,8 +48,8 @@ def getLatestRate(must_arg,optional_arg):
         logger.info("----- start -----")
 
         # コマンドライン引数の利用
-        logger.info(f"must_arg = {must_arg}")
-        logger.info(f"optional_arg = {optional_arg}")
+        logger.info(f"ex_cd = {ex_cd}")
+        logger.info(f"symbol = {symbol}")
 
         # 取引所ステータス取得
         status = GA.exStatus()
@@ -59,8 +59,8 @@ def getLatestRate(must_arg,optional_arg):
             logger.info("The exchange is open.")
             logger.info("Start getting the latest rate.")
 
-            ex_cd = f"{must_arg}"
-            symbol = f"{optional_arg}"
+            ex_cd = f"{ex_cd}"
+            symbol = f"{symbol}"
             latestRateJson = GA.latestRate(symbol)
 
             # 登録データ定義

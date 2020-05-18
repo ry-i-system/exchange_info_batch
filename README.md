@@ -75,19 +75,19 @@ class EndpointConf(object):
 * `get_latest_rate.py`の場合
 ```
 $ cd $app_home
-$ python bin/get_latest_rate.py -f "gmo" -o "BTC_JPY"
+$ python bin/get_latest_rate.py -e "gmo" -s "BTC_JPY"
 ```
 
 * `exec_leverage_trade.py`の場合
 ```
 $ cd $app_home
-$ python bin/exec_leverage_trade.py -f "gmo" -o "BTC_JPY"
+$ python bin/exec_leverage_trade.py -e "gmo" -s "BTC_JPY"
 ```
 
 * `migration.py`の場合 (引数は migration/ に格納したSQLファイル名　※拡張子.sqlは除く)
 ```
 $ cd $app_home
-$ python bin/migration.py -f "sql_file_name"
+$ python bin/migration.py -m "sql_file_name"
 ```
 
 ### 単体テスト実行方法

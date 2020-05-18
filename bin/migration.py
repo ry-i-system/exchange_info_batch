@@ -18,9 +18,8 @@ from lib.db_access import DbAccess as DA
 
 # コマンドライン引数のハンドリング. must_argは必須オプション、optional_argは任意オプション
 @click.command()
-@click.option('--must_arg', '-f', required=True)
-@click.option('--optional_arg','-o',default="None")
-def migration(must_arg,optional_arg):
+@click.option('--migration_file', '-m', required=True)
+def migration(migration_file):
     # 自身の名前から拡張子を除いてプログラム名(${prog_name})にする
     prog_name = os.path.splitext(os.path.basename(__file__))[0]
 
@@ -46,11 +45,10 @@ def migration(must_arg,optional_arg):
         logger.info("----- start -----")
 
         # コマンドライン引数の利用
-        logger.info(f"must_arg = {must_arg}")
-        logger.info(f"optional_arg = {optional_arg}")
+        logger.info(f"migration_file = {migration_file}")
 
         # SQL取得
-        f = open(app_home + "/migration/" + f"{must_arg}" + ".sql")
+        f = open(app_home + f"/migration/{migration_file}.sql")
         data = f.read()
         sql = data.replace('\n','')
         f.close()
