@@ -57,14 +57,13 @@ def gmoGetLatestRate(must_arg,optional_arg):
         # 取引所がOPENの場合
         if status == "OPEN":
             logger.info("The exchange is open.")
-            logger.info("Start leveraged trading.")
 
             # 登録データ定義
             ex_cd = f"{must_arg}"
             symbol = f"{optional_arg}"
 
             # DB接続
-            logger.info("Start DB connection.")
+            logger.info("Start: DB connection.")
             # 過去データ取得SQL
             sql = "SELECT avg(ask) as ask, avg(bid) as bid FROM eip_latest_rate WHERE datetime > CURRENT_TIMESTAMP + INTERVAL - 5 MINUTE \
                    UNION ALL \
@@ -85,10 +84,10 @@ def gmoGetLatestRate(must_arg,optional_arg):
                    SELECT avg(ask) as ask, avg(bid) as bid FROM eip_latest_rate WHERE datetime > CURRENT_TIMESTAMP + INTERVAL - 2880 MINUTE"
 
             res = DA.dbSelect(sql)
-            logger.info("DB connection completed.")
+            logger.info("End  : DB connection.")
 
             # 最新レート取得
-            logger.info("Start getting the latest rate.")
+            logger.info("Start: get the latest rate.")
             latestRateJson = GA.latestRate(symbol)
             # 最新ASK
             latest_ask = float(latestRateJson['data'][0]['ask'])
@@ -96,33 +95,49 @@ def gmoGetLatestRate(must_arg,optional_arg):
             latest_bid = float(latestRateJson['data'][0]['bid'])
             # 最新スプレッド
             latest_spread = latest_ask - latest_bid
-            logger.info("Acquisition of the latest rate has been completed.")
+            logger.info("End  : get the latest rate.")
 
             # UP/DOWN判定
-            logger.info("Start judgement.")
-            ask_judg = { \
-                '5m': float(res[0][0]) - latest_ask, \
-                '10m': float(res[0][0]) - latest_ask, \
-                '15m': float(res[0][0]) - latest_ask, \
-                '30m': float(res[0][0]) - latest_ask, \
-                '60m': float(res[0][0]) - latest_ask, \
-                '120m': float(res[0][0]) - latest_ask, \
-                '720m': float(res[0][0]) - latest_ask, \
-                '1440m': float(res[0][0]) - latest_ask, \
-                '2880m': float(res[0][0]) - latest_ask \
+            logger.info("Start: UP/DOWN judgement.")
+            ask_dict = {
+                '5m': float(res[0][0]) - latest_ask,
+                '10m': float(res[0][0]) - latest_ask,
+                '15m': float(res[0][0]) - latest_ask,
+                '30m': float(res[0][0]) - latest_ask,
+                '60m': float(res[0][0]) - latest_ask,
+                '120m': float(res[0][0]) - latest_ask,
+                '720m': float(res[0][0]) - latest_ask,
+                '1440m': float(res[0][0]) - latest_ask,
+                '2880m': float(res[0][0]) - latest_ask
             }
-            bid_judg = { \
-                '5m': float(res[0][0]) - latest_bid, \
-                '10m': float(res[0][0]) - latest_bid, \
-                '15m': float(res[0][0]) - latest_bid, \
-                '30m': float(res[0][0]) - latest_bid, \
-                '60m': float(res[0][0]) - latest_bid, \
-                '120m': float(res[0][0]) - latest_bid, \
-                '720m': float(res[0][0]) - latest_bid, \
-                '1440m': float(res[0][0]) - latest_bid, \
-                '2880m': float(res[0][0]) - latest_bid \
+            bid_dict = {
+                '5m': float(res[0][0]) - latest_bid,
+                '10m': float(res[0][0]) - latest_bid,
+                '15m': float(res[0][0]) - latest_bid,
+                '30m': float(res[0][0]) - latest_bid,
+                '60m': float(res[0][0]) - latest_bid,
+                '120m': float(res[0][0]) - latest_bid,
+                '720m': float(res[0][0]) - latest_bid,
+                '1440m': float(res[0][0]) - latest_bid,
+                '2880m': float(res[0][0]) - latest_bid
             }
-            logger.info("Judgement completed.")
+            ask_judg = ask_dict['5m'] + ask_dict['10m'] + ask_dict['15m'] + \
+                       ask_dict['30m'] + ask_dict['60m'] + ask_dict['120m'] + \
+                       ask_dict['720m'] + ask_dict['1440m'] + ask_dict['2880m']
+            bid_judg = bid_dict['5m'] + bid_dict['10m'] + bid_dict['15m'] + \
+                       bid_dict['30m'] + bid_dict['60m'] + bid_dict['120m'] + \
+                       bid_dict['720m'] + bid_dict['1440m'] + bid_dict['2880m']
+            logger.info("End  : UP/DOWN judgement.")
+
+            # 余力取得
+            logger.info("Start: get available amount.")
+            aaJson = GA.availableAmount()
+            apl = int(aaJson['data']['actualProfitLoss']) - int(aaJson['data']['availableAmount'])
+            logger.info("End  : get available amount.")
+
+            # 建玉がない場合はレバレッジ取引開始
+            if apl == 0:
+                print("処理開始")
 
         else:
             logger.warning("The exchange is not open.")

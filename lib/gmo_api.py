@@ -39,7 +39,7 @@ class GmoApi(object):
 
     # 余力情報取得
     def availableAmount():
-        endPoint  = EC.priURL
+        endPoint  = EC.priUrl
         apiKey    = EC.apiKey
         secretKey = EC.secretKey
         timestamp = '{0}000'.format(int(time.mktime(datetime.now().timetuple())))
@@ -59,7 +59,7 @@ class GmoApi(object):
 
     # 建玉一覧取得
     def openPositions(symbol):
-        endPoint  = EC.priURL
+        endPoint  = EC.priUrl
         apiKey    = EC.apiKey
         secretKey = EC.secretKey
         timestamp = '{0}000'.format(int(time.mktime(datetime.now().timetuple())))
