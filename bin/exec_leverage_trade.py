@@ -65,23 +65,23 @@ def execLeveregeTrade(ex_cd,symbol):
             # DB接続
             logger.info("Start: DB connection.")
             # 過去データ取得SQL
-            sql = "SELECT avg(ask) as ask, avg(bid) as bid FROM eip_latest_rate WHERE datetime > CURRENT_TIMESTAMP + INTERVAL - 5 MINUTE \
+            sql = "SELECT avg(ask) as ask, avg(bid) as bid, avg(last) as last FROM eip_latest_rate WHERE datetime > CURRENT_TIMESTAMP + INTERVAL - 5 MINUTE \
                    UNION ALL \
-                   SELECT avg(ask) as ask, avg(bid) as bid FROM eip_latest_rate WHERE datetime > CURRENT_TIMESTAMP + INTERVAL - 10 MINUTE \
+                   SELECT avg(ask) as ask, avg(bid) as bid, avg(last) as last FROM eip_latest_rate WHERE datetime > CURRENT_TIMESTAMP + INTERVAL - 10 MINUTE \
                    UNION ALL \
-                   SELECT avg(ask) as ask, avg(bid) as bid FROM eip_latest_rate WHERE datetime > CURRENT_TIMESTAMP + INTERVAL - 15 MINUTE \
+                   SELECT avg(ask) as ask, avg(bid) as bid, avg(last) as last FROM eip_latest_rate WHERE datetime > CURRENT_TIMESTAMP + INTERVAL - 15 MINUTE \
                    UNION ALL \
-                   SELECT avg(ask) as ask, avg(bid) as bid FROM eip_latest_rate WHERE datetime > CURRENT_TIMESTAMP + INTERVAL - 30 MINUTE \
+                   SELECT avg(ask) as ask, avg(bid) as bid, avg(last) as last FROM eip_latest_rate WHERE datetime > CURRENT_TIMESTAMP + INTERVAL - 30 MINUTE \
                    UNION ALL \
-                   SELECT avg(ask) as ask, avg(bid) as bid FROM eip_latest_rate WHERE datetime > CURRENT_TIMESTAMP + INTERVAL - 60 MINUTE \
+                   SELECT avg(ask) as ask, avg(bid) as bid, avg(last) as last FROM eip_latest_rate WHERE datetime > CURRENT_TIMESTAMP + INTERVAL - 60 MINUTE \
                    UNION ALL \
-                   SELECT avg(ask) as ask, avg(bid) as bid FROM eip_latest_rate WHERE datetime > CURRENT_TIMESTAMP + INTERVAL - 120 MINUTE \
+                   SELECT avg(ask) as ask, avg(bid) as bid, avg(last) as last FROM eip_latest_rate WHERE datetime > CURRENT_TIMESTAMP + INTERVAL - 120 MINUTE \
                    UNION ALL \
-                   SELECT avg(ask) as ask, avg(bid) as bid FROM eip_latest_rate WHERE datetime > CURRENT_TIMESTAMP + INTERVAL - 720 MINUTE \
+                   SELECT avg(ask) as ask, avg(bid) as bid, avg(last) as last FROM eip_latest_rate WHERE datetime > CURRENT_TIMESTAMP + INTERVAL - 720 MINUTE \
                    UNION ALL \
-                   SELECT avg(ask) as ask, avg(bid) as bid FROM eip_latest_rate WHERE datetime > CURRENT_TIMESTAMP + INTERVAL - 1440 MINUTE \
+                   SELECT avg(ask) as ask, avg(bid) as bid, avg(last) as last FROM eip_latest_rate WHERE datetime > CURRENT_TIMESTAMP + INTERVAL - 1440 MINUTE \
                    UNION ALL \
-                   SELECT avg(ask) as ask, avg(bid) as bid FROM eip_latest_rate WHERE datetime > CURRENT_TIMESTAMP + INTERVAL - 2880 MINUTE"
+                   SELECT avg(ask) as ask, avg(bid) as bid, avg(last) as last FROM eip_latest_rate WHERE datetime > CURRENT_TIMESTAMP + INTERVAL - 2880 MINUTE"
 
             res = DA.dbSelect(sql)
             logger.info("End  : DB connection.")
@@ -89,10 +89,12 @@ def execLeveregeTrade(ex_cd,symbol):
             # 最新レート取得
             logger.info("Start: get the latest rate.")
             latestRateJson = GA.latestRate(symbol)
-            # 最新ASK
+            # 最新Ask
             latest_ask = float(latestRateJson['data'][0]['ask'])
-            # 最新BID
+            # 最新Bid
             latest_bid = float(latestRateJson['data'][0]['bid'])
+            # 最新Last
+            latest_last = float(latestRateJson['data'][0]['last'])
             # 最新スプレッド
             latest_spread = latest_ask - latest_bid
             logger.info("End  : get the latest rate.")
@@ -101,25 +103,36 @@ def execLeveregeTrade(ex_cd,symbol):
             logger.info("Start: UP/DOWN judgement.")
             ask_dict = {
                 '5m': float(res[0][0]) - latest_ask,
-                '10m': float(res[0][0]) - latest_ask,
-                '15m': float(res[0][0]) - latest_ask,
-                '30m': float(res[0][0]) - latest_ask,
-                '60m': float(res[0][0]) - latest_ask,
-                '120m': float(res[0][0]) - latest_ask,
-                '720m': float(res[0][0]) - latest_ask,
-                '1440m': float(res[0][0]) - latest_ask,
-                '2880m': float(res[0][0]) - latest_ask
+                '10m': float(res[1][0]) - latest_ask,
+                '15m': float(res[2][0]) - latest_ask,
+                '30m': float(res[3][0]) - latest_ask,
+                '60m': float(res[4][0]) - latest_ask,
+                '120m': float(res[5][0]) - latest_ask,
+                '720m': float(res[6][0]) - latest_ask,
+                '1440m': float(res[7][0]) - latest_ask,
+                '2880m': float(res[8][0]) - latest_ask
             }
             bid_dict = {
-                '5m': float(res[0][0]) - latest_bid,
-                '10m': float(res[0][0]) - latest_bid,
-                '15m': float(res[0][0]) - latest_bid,
-                '30m': float(res[0][0]) - latest_bid,
-                '60m': float(res[0][0]) - latest_bid,
-                '120m': float(res[0][0]) - latest_bid,
-                '720m': float(res[0][0]) - latest_bid,
-                '1440m': float(res[0][0]) - latest_bid,
-                '2880m': float(res[0][0]) - latest_bid
+                '5m': float(res[0][1]) - latest_bid,
+                '10m': float(res[1][1]) - latest_bid,
+                '15m': float(res[2][1]) - latest_bid,
+                '30m': float(res[3][1]) - latest_bid,
+                '60m': float(res[4][1]) - latest_bid,
+                '120m': float(res[5][1]) - latest_bid,
+                '720m': float(res[6][1]) - latest_bid,
+                '1440m': float(res[7][1]) - latest_bid,
+                '2880m': float(res[8][1]) - latest_bid
+            }
+            last_dict = {
+                '5m': float(res[0][2]) - latest_last,
+                '10m': float(res[1][2]) - latest_last,
+                '15m': float(res[2][2]) - latest_last,
+                '30m': float(res[3][2]) - latest_last,
+                '60m': float(res[4][2]) - latest_last,
+                '120m': float(res[5][2]) - latest_last,
+                '720m': float(res[6][2]) - latest_last,
+                '1440m': float(res[7][2]) - latest_last,
+                '2880m': float(res[8][2]) - latest_last
             }
             ask_judg = ask_dict['5m'] + ask_dict['10m'] + ask_dict['15m'] + \
                        ask_dict['30m'] + ask_dict['60m'] + ask_dict['120m'] + \
@@ -127,8 +140,21 @@ def execLeveregeTrade(ex_cd,symbol):
             bid_judg = bid_dict['5m'] + bid_dict['10m'] + bid_dict['15m'] + \
                        bid_dict['30m'] + bid_dict['60m'] + bid_dict['120m'] + \
                        bid_dict['720m'] + bid_dict['1440m'] + bid_dict['2880m']
-            logger.info("ask judgement : " + str(ask_judg))
-            logger.info("bid judgement : " + str(bid_judg))
+            last_judg = last_dict['5m'] + last_dict['10m'] + last_dict['15m'] + \
+                       last_dict['30m'] + last_dict['60m'] + last_dict['120m'] + \
+                       last_dict['720m'] + last_dict['1440m'] + last_dict['2880m']
+            logger.info("Ask judgement : " + str(ask_judg))
+            logger.info("Bid judgement : " + str(bid_judg))
+            logger.info("Last judgement : " + str(last_judg))
+            logger.info("Last    5 minutes ago : " + str(last_dict['5m']))
+            logger.info("Last   10 minutes ago : " + str(last_dict['10m']))
+            logger.info("Last   15 minutes ago : " + str(last_dict['15m']))
+            logger.info("Last   30 minutes ago : " + str(last_dict['30m']))
+            logger.info("Last   60 minutes ago : " + str(last_dict['60m']))
+            logger.info("Last  120 minutes ago : " + str(last_dict['120m']))
+            logger.info("Last  720 minutes ago : " + str(last_dict['720m']))
+            logger.info("Last 1440 minutes ago : " + str(last_dict['1440m']))
+            logger.info("Last 2880 minutes ago : " + str(last_dict['2880m']))
             logger.info("End  : UP/DOWN judgement.")
 
             # 拘束証拠金取得
