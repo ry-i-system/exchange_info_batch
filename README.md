@@ -41,9 +41,6 @@ app_home/
 ```
 $ cd $app_home
 $ git clone https://github.com/ry-i-system/exchange_info_batch.git
-$ pip install pipenv
-$ pipenv install
-$ pipenv shell
 ```
 2. 必要なPythonライブラリをインストール
 ```
