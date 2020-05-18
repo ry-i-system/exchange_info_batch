@@ -19,6 +19,7 @@
 ```
 app_home/
        ├ bin/
+       │   ├  exec_leverage_trade.py   # レバレッジ取引 
        │   ├  migration.py             # テーブル作成／定義変更
        │   └  get_latest_rate.py       # 最新レート取得
        ├ conf/
