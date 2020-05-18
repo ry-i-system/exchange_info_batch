@@ -46,6 +46,9 @@ $ git clone https://github.com/ry-i-system/exchange_info_batch.git
 ```
 $ pip install pipenv
 $ pipenv install
+```
+3. Python実行環境にスイッチ
+```
 $ pipenv shell
 ```
 
