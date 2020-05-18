@@ -74,7 +74,13 @@ class EndpointConf(object):
 * `get_latest_rate.py`の場合
 ```
 $ cd $app_home
-$ python bin/get_latest_rate.py -f gmo
+$ python bin/get_latest_rate.py -f "gmo" -o "BTC_JPY"
+```
+
+* `exec_leverage_trade.py`の場合
+```
+$ cd $app_home
+$ python bin/exec_leverage_trade.py -f "gmo" -o "BTC_JPY"
 ```
 
 * `migration.py`の場合 (引数は migration/ に格納したSQLファイル名　※拡張子.sqlは除く)
