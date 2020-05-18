@@ -22,7 +22,7 @@ from lib.gmo_api import GmoApi as GA
 @click.command()
 @click.option('--must_arg', '-f', required=True)
 @click.option('--optional_arg','-o',default="BTC_JPY")
-def gmoGetLatestRate(must_arg,optional_arg):
+def getLatestRate(must_arg,optional_arg):
     # 自身の名前から拡張子を除いてプログラム名(${prog_name})にする
     prog_name = os.path.splitext(os.path.basename(__file__))[0]
 
@@ -97,4 +97,4 @@ def gmoGetLatestRate(must_arg,optional_arg):
         sys.exit(1)
 
 if __name__ == '__main__':
-    gmoGetLatestRate()
+    getLatestRate()

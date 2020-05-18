@@ -22,7 +22,7 @@ from lib.gmo_api import GmoApi as GA
 @click.command()
 @click.option('--must_arg', '-f', required=True)
 @click.option('--optional_arg','-o',default="BTC_JPY")
-def gmoGetLatestRate(must_arg,optional_arg):
+def execLeveregeTrade(must_arg,optional_arg):
     # 自身の名前から拡張子を除いてプログラム名(${prog_name})にする
     prog_name = os.path.splitext(os.path.basename(__file__))[0]
 
@@ -127,6 +127,8 @@ def gmoGetLatestRate(must_arg,optional_arg):
             bid_judg = bid_dict['5m'] + bid_dict['10m'] + bid_dict['15m'] + \
                        bid_dict['30m'] + bid_dict['60m'] + bid_dict['120m'] + \
                        bid_dict['720m'] + bid_dict['1440m'] + bid_dict['2880m']
+            logger.info("ask judgement : " + str(ask_judg))
+            logger.info("bid judgement : " + str(bid_judg))
             logger.info("End  : UP/DOWN judgement.")
 
             # 余力取得
@@ -137,7 +139,7 @@ def gmoGetLatestRate(must_arg,optional_arg):
 
             # 建玉がない場合はレバレッジ取引開始
             if apl == 0:
-                print("処理開始")
+                print("Start: leverage trading.")
 
         else:
             logger.warning("The exchange is not open.")
@@ -156,4 +158,4 @@ def gmoGetLatestRate(must_arg,optional_arg):
         sys.exit(1)
 
 if __name__ == '__main__':
-    gmoGetLatestRate()
+    execLeveregeTrade()
