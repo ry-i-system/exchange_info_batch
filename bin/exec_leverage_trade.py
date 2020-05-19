@@ -101,28 +101,28 @@ def execLeveregeTrade(ex_cd,symbol):
 
             # UP/DOWN判定
             logger.info("Start: UP/DOWN judgement.")
-            ask_dict = {
-                '5m': float(res[0][0]) - latest_ask,
-                '10m': float(res[1][0]) - latest_ask,
-                '15m': float(res[2][0]) - latest_ask,
-                '30m': float(res[3][0]) - latest_ask,
-                '60m': float(res[4][0]) - latest_ask,
-                '120m': float(res[5][0]) - latest_ask,
-                '720m': float(res[6][0]) - latest_ask,
-                '1440m': float(res[7][0]) - latest_ask,
-                '2880m': float(res[8][0]) - latest_ask
-            }
-            bid_dict = {
-                '5m': float(res[0][1]) - latest_bid,
-                '10m': float(res[1][1]) - latest_bid,
-                '15m': float(res[2][1]) - latest_bid,
-                '30m': float(res[3][1]) - latest_bid,
-                '60m': float(res[4][1]) - latest_bid,
-                '120m': float(res[5][1]) - latest_bid,
-                '720m': float(res[6][1]) - latest_bid,
-                '1440m': float(res[7][1]) - latest_bid,
-                '2880m': float(res[8][1]) - latest_bid
-            }
+            # ask_dict = {
+            #     '5m': float(res[0][0]) - latest_ask,
+            #     '10m': float(res[1][0]) - latest_ask,
+            #     '15m': float(res[2][0]) - latest_ask,
+            #     '30m': float(res[3][0]) - latest_ask,
+            #     '60m': float(res[4][0]) - latest_ask,
+            #     '120m': float(res[5][0]) - latest_ask,
+            #     '720m': float(res[6][0]) - latest_ask,
+            #     '1440m': float(res[7][0]) - latest_ask,
+            #     '2880m': float(res[8][0]) - latest_ask
+            # }
+            # bid_dict = {
+            #     '5m': float(res[0][1]) - latest_bid,
+            #     '10m': float(res[1][1]) - latest_bid,
+            #     '15m': float(res[2][1]) - latest_bid,
+            #     '30m': float(res[3][1]) - latest_bid,
+            #     '60m': float(res[4][1]) - latest_bid,
+            #     '120m': float(res[5][1]) - latest_bid,
+            #     '720m': float(res[6][1]) - latest_bid,
+            #     '1440m': float(res[7][1]) - latest_bid,
+            #     '2880m': float(res[8][1]) - latest_bid
+            # }
             last_dict = {
                 '5m': float(res[0][2]) - latest_last,
                 '10m': float(res[1][2]) - latest_last,
@@ -134,27 +134,38 @@ def execLeveregeTrade(ex_cd,symbol):
                 '1440m': float(res[7][2]) - latest_last,
                 '2880m': float(res[8][2]) - latest_last
             }
-            ask_judg = ask_dict['5m'] + ask_dict['10m'] + ask_dict['15m'] + \
-                       ask_dict['30m'] + ask_dict['60m'] + ask_dict['120m'] + \
-                       ask_dict['720m'] + ask_dict['1440m'] + ask_dict['2880m']
-            bid_judg = bid_dict['5m'] + bid_dict['10m'] + bid_dict['15m'] + \
-                       bid_dict['30m'] + bid_dict['60m'] + bid_dict['120m'] + \
-                       bid_dict['720m'] + bid_dict['1440m'] + bid_dict['2880m']
-            last_judg = last_dict['5m'] + last_dict['10m'] + last_dict['15m'] + \
-                       last_dict['30m'] + last_dict['60m'] + last_dict['120m'] + \
-                       last_dict['720m'] + last_dict['1440m'] + last_dict['2880m']
-            logger.info("Ask judgement : " + str(ask_judg))
-            logger.info("Bid judgement : " + str(bid_judg))
+            last_ud = {
+                '5m': -1 if last_dict['5m'] > 0 else 1 if last_dict['5m'] < 0 else 0,
+                '10m': -1 if last_dict['10m'] > 0 else 1 if last_dict['10m'] < 0 else 0,
+                '15m': -1 if last_dict['15m'] > 0 else 1 if last_dict['15m'] < 0 else 0,
+                '30m': -1 if last_dict['30m'] > 0 else 1 if last_dict['30m'] < 0 else 0,
+                '60m': -1 if last_dict['60m'] > 0 else 1 if last_dict['60m'] < 0 else 0,
+                '120m': -1 if last_dict['120m'] > 0 else 1 if last_dict['120m'] < 0 else 0,
+                '720m': -1 if last_dict['720m'] > 0 else 1 if last_dict['720m'] < 0 else 0,
+                '1440m': -1 if last_dict['1440m'] > 0 else 1 if last_dict['1440m'] < 0 else 0,
+                '2880m': -1 if last_dict['2880m'] > 0 else 1 if last_dict['2880m'] < 0 else 0
+            }
+            # ask_judg = ask_dict['5m'] + ask_dict['10m'] + ask_dict['15m'] + \
+            #            ask_dict['30m'] + ask_dict['60m'] + ask_dict['120m'] + \
+            #            ask_dict['720m'] + ask_dict['1440m'] + ask_dict['2880m']
+            # bid_judg = bid_dict['5m'] + bid_dict['10m'] + bid_dict['15m'] + \
+            #            bid_dict['30m'] + bid_dict['60m'] + bid_dict['120m'] + \
+            #            bid_dict['720m'] + bid_dict['1440m'] + bid_dict['2880m']
+            last_judg = last_ud['5m'] + last_ud['10m'] + last_ud['15m'] + \
+                       last_ud['30m'] + last_ud['60m'] + last_ud['120m'] + \
+                       last_ud['720m'] + last_ud['1440m'] + last_ud['2880m']
+            # logger.info("Ask judgement : " + str(ask_judg))
+            # logger.info("Bid judgement : " + str(bid_judg))
             logger.info("Last judgement : " + str(last_judg))
-            logger.info("Last    5 minutes ago : " + str(last_dict['5m']))
-            logger.info("Last   10 minutes ago : " + str(last_dict['10m']))
-            logger.info("Last   15 minutes ago : " + str(last_dict['15m']))
-            logger.info("Last   30 minutes ago : " + str(last_dict['30m']))
-            logger.info("Last   60 minutes ago : " + str(last_dict['60m']))
-            logger.info("Last  120 minutes ago : " + str(last_dict['120m']))
-            logger.info("Last  720 minutes ago : " + str(last_dict['720m']))
-            logger.info("Last 1440 minutes ago : " + str(last_dict['1440m']))
-            logger.info("Last 2880 minutes ago : " + str(last_dict['2880m']))
+            logger.info("Last    5 minutes ago : " + str(last_ud['5m']))
+            logger.info("Last   10 minutes ago : " + str(last_ud['10m']))
+            logger.info("Last   15 minutes ago : " + str(last_ud['15m']))
+            logger.info("Last   30 minutes ago : " + str(last_ud['30m']))
+            logger.info("Last   60 minutes ago : " + str(last_ud['60m']))
+            logger.info("Last  120 minutes ago : " + str(last_ud['120m']))
+            logger.info("Last  720 minutes ago : " + str(last_ud['720m']))
+            logger.info("Last 1440 minutes ago : " + str(last_ud['1440m']))
+            logger.info("Last 2880 minutes ago : " + str(last_ud['2880m']))
             logger.info("End  : UP/DOWN judgement.")
 
             # 拘束証拠金取得
@@ -175,12 +186,25 @@ def execLeveregeTrade(ex_cd,symbol):
             logger.info("End  : get open positions.")
 
             # 取引余力が10000以上・拘束証拠金が0・建玉がない場合はレバレッジ取引開始
-            if availableAmount >= 10000 and margin == 0 and opJson['data'] == opNone:
-                logger.info("Start: leverage trading.")
+            if availableAmount >= 10000:
+                if margin == 0:
+                    if opJson['data'] == opNone:
+                        # レバレッジ取引開始
+                        logger.info("Start: leverage trading.")
+                        # 上昇予想の場合
 
-                logger.info("End  : leverage trading.")
+                        # 下降予想の場合
+
+                        # レバレッジ取引終了
+                        logger.info("End  : leverage trading.")
+                    else:
+                        logger.info("There is an open position.")
+                else:
+                    logger.info("Detention margin is not 0.")
+            else:
+                logger.info("Trading capacity (availableAmount) is below 10,000.")
         else:
-            logger.warning("The exchange is not open.")
+            logger.info("The exchange is not open.")
 
         # 処理終了
         logger.info("End processing.")
