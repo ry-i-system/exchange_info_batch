@@ -81,3 +81,65 @@ class GmoApi(object):
         response = requests.get(endPoint + path, headers=headers, params=parameters)
         data = response.json()
         return data
+
+    # 成行注文
+    def openOrder(symbol, side):
+        endPoint  = EC.priUrl
+        apiKey    = EC.apiKey
+        secretKey = EC.secretKey
+        timestamp = '{0}000'.format(int(time.mktime(datetime.now().timetuple())))
+        method    = 'POST'
+        path      = '/v1/order'
+        reqBody = {
+            "symbol": symbol,
+            "side": side,
+            "executionType": "MARKET",
+            "size": "0.01"
+        }
+
+        text = timestamp + method + path + json.dumps(reqBody)
+        sign = hmac.new(bytes(secretKey.encode('ascii')), bytes(text.encode('ascii')), hashlib.sha256).hexdigest()
+
+        headers = {
+            "API-KEY": apiKey,
+            "API-TIMESTAMP": timestamp,
+            "API-SIGN": sign
+        }
+
+        response = requests.post(endPoint + path, headers=headers, data=json.dumps(reqBody))
+        data = response.json()
+        return data
+
+    # 指値決済注文
+    def closeOrder(symbol, side, price, positionId):
+        endPoint  = EC.priUrl
+        apiKey    = EC.apiKey
+        secretKey = EC.secretKey
+        timestamp = '{0}000'.format(int(time.mktime(datetime.now().timetuple())))
+        method    = 'POST'
+        path      = '/v1/closeOrder'
+        reqBody = {
+            "symbol": symbol,
+            "side": side,
+            "executionType": "LIMIT",
+            "price": price,
+            "settlePosition": [
+                {
+                    "positionId": positionId,
+                    "size": "0.01"
+                }
+            ]
+        }
+
+        text = timestamp + method + path + json.dumps(reqBody)
+        sign = hmac.new(bytes(secretKey.encode('ascii')), bytes(text.encode('ascii')), hashlib.sha256).hexdigest()
+
+        headers = {
+            "API-KEY": apiKey,
+            "API-TIMESTAMP": timestamp,
+            "API-SIGN": sign
+        }
+
+        response = requests.post(endPoint + path, headers=headers, data=json.dumps(reqBody))
+        data = response.json()
+        return data
