@@ -230,7 +230,7 @@ def execLeveregeTrade(ex_cd,symbol):
 
                                 # 売り指値決済注文
                                 logger.info("Start: Sell close order.")
-                                coJson = GA.openOrder(symbol, "SELL", price, positionId, coin_size)
+                                coJson = GA.closeOrder(symbol, "SELL", price, positionId, coin_size)
                                 logger.info("End  : Sell close order.")
                             # 下降予想の場合
                             elif last_judg < 0:
@@ -249,7 +249,7 @@ def execLeveregeTrade(ex_cd,symbol):
 
                                 # 買い指値決済注文
                                 logger.info("Start: Buy close order.")
-                                coJson = GA.openOrder(symbol, "BUY", price, positionId, coin_size)
+                                coJson = GA.closeOrder(symbol, "BUY", price, positionId, coin_size)
                                 logger.info("End  : Buy close order.")
                             else:
                                 # 予想できない場合は取引しない
