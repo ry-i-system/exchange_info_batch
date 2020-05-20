@@ -110,3 +110,20 @@ Ran 3 tests in 0.292s
 
 OK
 ```
+
+### cron設定方法
+
+`crontab -e`コマンドで以下を入力し保存します。
+※ virtualenvsのIDは環境ごとに違います。
+
+* 5秒おきに最新レートを取得
+```shell
+# Get the latest rate every 5 seconds
+* * * * * for i in `seq 0 5 59`;do (sleep ${i}; cd /home/eib/exchange_info_batch/; . /home/eib/.local/share/virtualenvs/exchange_info_batch-xxx_xxxx/bin/activate; python bin/get_latest_rate.py -e "gmo" -s "BTC_JPY") & done;
+```
+
+* 10秒おきにレバレッジ取引を実行
+```shell
+# Exec leverage trade every 10 seconds
+* * * * * for i in `seq 0 10 59`;do (sleep ${i}; cd /home/eib/exchange_info_batch/; . /home/eib/.local/share/virtualenvs/exchange_info_batch-xxx_xxxx/bin/activate; python bin/exec_leverage_trade.py -e "gmo" -s "BTC_JPY") & done;
+```
