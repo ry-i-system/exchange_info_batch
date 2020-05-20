@@ -224,8 +224,8 @@ def execLeveregeTrade(ex_cd,symbol):
                                 # 建玉取得
                                 logger.info("Start: get open positions.")
                                 opJson = GA.openPositions(symbol)
-                                positionId = ooJson['list'][0]['positionId']
-                                price = int(ooJson['list'][0]['price']) + price_range
+                                positionId = ooJson['data']['list'][0]['positionId']
+                                price = int(ooJson['data']['list'][0]['price']) + price_range
                                 logger.info("End  : get open positions.")
 
                                 # 売り指値決済注文
@@ -243,8 +243,8 @@ def execLeveregeTrade(ex_cd,symbol):
                                 # 建玉取得
                                 logger.info("Start: get open positions.")
                                 opJson = GA.openPositions(symbol)
-                                positionId = ooJson['list'][0]['positionId']
-                                price = int(ooJson['list'][0]['price']) - price_range
+                                positionId = ooJson['data']['list'][0]['positionId']
+                                price = int(ooJson['data']['list'][0]['price']) - price_range
                                 logger.info("End  : get open positions.")
 
                                 # 買い指値決済注文
