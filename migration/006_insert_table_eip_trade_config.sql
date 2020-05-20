@@ -1,0 +1,1 @@
+INSERT INTO eip_trade_config (ex_cd, symbol, coin_size, spread, price_range) VALUES ('gmo', 'BTC_JPY', 0.01, 1000, 5000)

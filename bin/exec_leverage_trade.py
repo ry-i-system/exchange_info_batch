@@ -192,14 +192,25 @@ def execLeveregeTrade(ex_cd,symbol):
             opNone = {}
             logger.info("End  : get open positions.")
 
+            # 取引設定取得
+            logger.info("Start: DB connection.")
+            res = DA.dbSelect("SELECT * FROM eip_trade_config")
+            # 取引コインサイズ
+            coin_size = float(res[0][2])
+            # 取引スプレッド
+            spread = int(res[0][3])
+            # 取引範囲
+            price_range = int(res[0][4])
+            logger.info("End  : DB connection.")
+
             # 建玉がなければ正
             if opJson['data'] == opNone:
                 # 拘束証拠金が0であれば正
                 if margin == 0:
                     # 余力が10000以上であれば正
                     if availableAmount >= 10000:
-                        # 最新レートのスプレッドが-1000～1000以内であれば正
-                        if latest_spread >= -1000 and latest_spread <= 1000:
+                        # 最新レートのスプレッドが設定値以内であれば正
+                        if latest_spread >= -spread and latest_spread <= spread:
                             # レバレッジ取引開始
                             logger.info("Start: leverage trade.")
                             # 上昇予想の場合
@@ -207,38 +218,38 @@ def execLeveregeTrade(ex_cd,symbol):
                                 # 買い成行注文
                                 logger.info("It is expected to rise.")
                                 logger.info("Start: Buy order.")
-                                ooJson = GA.openOrder(symbol, "BUY")
+                                ooJson = GA.openOrder(symbol, "BUY", coin_size)
                                 logger.info("End  : Buy order.")
 
                                 # 建玉取得
                                 logger.info("Start: get open positions.")
                                 opJson = GA.openPositions(symbol)
                                 positionId = ooJson['list'][0]['positionId']
-                                price = int(ooJson['list'][0]['price']) + 5000
+                                price = int(ooJson['list'][0]['price']) + price_range
                                 logger.info("End  : get open positions.")
 
                                 # 売り指値決済注文
                                 logger.info("Start: Sell close order.")
-                                coJson = GA.openOrder(symbol, "SELL", price, positionId)
+                                coJson = GA.openOrder(symbol, "SELL", price, positionId, coin_size)
                                 logger.info("End  : Sell close order.")
                             # 下降予想の場合
                             elif last_judg < 0:
                                 # 売り成行注文
                                 logger.info("It is expected to decline.")
                                 logger.info("Start: Sell order.")
-                                ooJson = GA.openOrder(symbol, "SELL")
+                                ooJson = GA.openOrder(symbol, "SELL", coin_size)
                                 logger.info("End  : Sell order.")
 
                                 # 建玉取得
                                 logger.info("Start: get open positions.")
                                 opJson = GA.openPositions(symbol)
                                 positionId = ooJson['list'][0]['positionId']
-                                price = int(ooJson['list'][0]['price']) - 5000
+                                price = int(ooJson['list'][0]['price']) - price_range
                                 logger.info("End  : get open positions.")
 
                                 # 買い指値決済注文
                                 logger.info("Start: Buy close order.")
-                                coJson = GA.openOrder(symbol, "BUY", price, positionId)
+                                coJson = GA.openOrder(symbol, "BUY", price, positionId, coin_size)
                                 logger.info("End  : Buy close order.")
                             else:
                                 # 予想できない場合は取引しない
@@ -247,7 +258,7 @@ def execLeveregeTrade(ex_cd,symbol):
                             logger.info("End  : leverage trade.")
                         else:
                             # スプレッドが広いため取引しない
-                            logger.info("The spread is not within -1000 ~ 1000.")
+                            logger.info("The spread is not within -" + str(spread) + " ~ " + str(spread) + ".")
                     else:
                         # 余力が10000以下の場合、取引しない
                         logger.info("Trading capacity (availableAmount) is below 10,000.")
