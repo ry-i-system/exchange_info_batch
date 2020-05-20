@@ -27,7 +27,10 @@ class GmoApi(object):
         path = '/v1/status'
         response = requests.get(EC.pubUrl + path)
         data = response.json()
-        status = data['data']['status']
+        if int(data['status']) == 0:
+            status = data['data']['status']
+        else:
+            status = data['messages'][0]['message_string']
         return status
 
     # 最新レート取得
