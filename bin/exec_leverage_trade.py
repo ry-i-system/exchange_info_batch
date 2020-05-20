@@ -32,7 +32,7 @@ def execLeveregeTrade(ex_cd,symbol):
     log_format = logging.Formatter("%(asctime)s [%(levelname)8s] %(message)s")
     # レベル
     logger = logging.getLogger()
-    logger.setLevel(logging.DEBUG)
+    logger.setLevel(logging.ERROR)
     # 標準出力へのハンドラ
     stdout_handler = logging.StreamHandler(sys.stdout)
     stdout_handler.setFormatter(log_format)
