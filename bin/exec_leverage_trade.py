@@ -192,49 +192,62 @@ def execLeveregeTrade(ex_cd,symbol):
             opNone = {}
             logger.info("End  : get open positions.")
 
-            # 取引余力が10000以上・拘束証拠金が0・建玉がない場合はレバレッジ取引開始
+            # 建玉がなければ正
             if opJson['data'] == opNone:
+                # 拘束証拠金が0であれば正
                 if margin == 0:
+                    # 余力が10000以上であれば正
                     if availableAmount >= 10000:
-                        # レバレッジ取引開始
-                        logger.info("Start: leverage trade.")
-                        # 上昇予想の場合
-                        if last_judg > 0:
-                            # 買い成行注文
-                            logger.info("It is expected to rise.")
-                            logger.info("Start: Buy order.")
-                            logger.info("End  : Buy order.")
+                        # 最新レートのスプレッドが-1000～1000以内であれば正
+                        if latest_spread >= -1000 and latest_spread <= 1000:
+                            # レバレッジ取引開始
+                            logger.info("Start: leverage trade.")
+                            # 上昇予想の場合
+                            if last_judg > 0:
+                                # 買い成行注文
+                                logger.info("It is expected to rise.")
+                                logger.info("Start: Buy order.")
+                                ooJson = GA.openOrder(symbol, "BUY")
+                                logger.info("End  : Buy order.")
 
-                            # 建玉取得
-                            logger.info("Start: get open positions.")
-                            opJson = GA.openPositions(symbol)
-                            logger.info("End  : get open positions.")
+                                # 建玉取得
+                                logger.info("Start: get open positions.")
+                                opJson = GA.openPositions(symbol)
+                                positionId = ooJson['list'][0]['positionId']
+                                price = int(ooJson['list'][0]['price']) + 5000
+                                logger.info("End  : get open positions.")
 
-                            # 売り指値決済注文
-                            logger.info("Start: Sell close order.")
-                            logger.info("End  : Sell close order.")
+                                # 売り指値決済注文
+                                logger.info("Start: Sell close order.")
+                                coJson = GA.openOrder(symbol, "SELL", price, positionId)
+                                logger.info("End  : Sell close order.")
+                            # 下降予想の場合
+                            elif last_judg < 0:
+                                # 売り成行注文
+                                logger.info("It is expected to decline.")
+                                logger.info("Start: Sell order.")
+                                ooJson = GA.openOrder(symbol, "SELL")
+                                logger.info("End  : Sell order.")
 
-                        # 下降予想の場合
-                        elif last_judg < 0:
-                            # 売り成行注文
-                            logger.info("It is expected to decline.")
-                            logger.info("Start: Sell order.")
-                            logger.info("End  : Sell order.")
+                                # 建玉取得
+                                logger.info("Start: get open positions.")
+                                opJson = GA.openPositions(symbol)
+                                positionId = ooJson['list'][0]['positionId']
+                                price = int(ooJson['list'][0]['price']) - 5000
+                                logger.info("End  : get open positions.")
 
-                            # 建玉取得
-                            logger.info("Start: get open positions.")
-                            opJson = GA.openPositions(symbol)
-                            logger.info("End  : get open positions.")
-
-                            # 買い指値決済注文
-                            logger.info("Start: Buy close order.")
-                            logger.info("End  : Buy close order.")
-                        
-                        # 予想できない場合は取引しない
+                                # 買い指値決済注文
+                                logger.info("Start: Buy close order.")
+                                coJson = GA.openOrder(symbol, "BUY", price, positionId)
+                                logger.info("End  : Buy close order.")
+                            else:
+                                # 予想できない場合は取引しない
+                                logger.info("Unexpected because the judgment index is 0.")
+                            # レバレッジ取引終了
+                            logger.info("End  : leverage trade.")
                         else:
-                            logger.info("Unexpected because the judgment index is 0.")
-                        # レバレッジ取引終了
-                        logger.info("End  : leverage trade.")
+                            # スプレッドが広いため取引しない
+                            logger.info("The spread is not within -1000 ~ 1000.")
                     else:
                         # 余力が10000以下の場合、取引しない
                         logger.info("Trading capacity (availableAmount) is below 10,000.")
