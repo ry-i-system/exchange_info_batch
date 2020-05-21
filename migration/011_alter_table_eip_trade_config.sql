@@ -1,0 +1,1 @@
+ALTER TABLE eip_trade_config ADD losscut_index INT NOT NULL
