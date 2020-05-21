@@ -8,6 +8,7 @@ import sys
 import os
 import click
 import logging
+import time
 
 # 親ディレクトリをアプリケーションのホーム(${app_home})に設定
 app_home = os.path.abspath(os.path.join( os.path.dirname(os.path.abspath(__file__)) , ".." ))
@@ -221,6 +222,8 @@ def execLeveregeTrade(ex_cd,symbol):
                                 ooJson = GA.openOrder(symbol, "BUY", coin_size)
                                 logger.info("End  : Buy order.")
 
+                                time.sleep(1)
+
                                 # 建玉取得
                                 logger.info("Start: get open positions.")
                                 opJson = GA.openPositions(symbol)
@@ -239,6 +242,8 @@ def execLeveregeTrade(ex_cd,symbol):
                                 logger.info("Start: Sell order.")
                                 ooJson = GA.openOrder(symbol, "SELL", coin_size)
                                 logger.info("End  : Sell order.")
+
+                                time.sleep(1)
 
                                 # 建玉取得
                                 logger.info("Start: get open positions.")
