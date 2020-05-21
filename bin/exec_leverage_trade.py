@@ -230,7 +230,7 @@ def execLeveregeTrade(ex_cd,symbol):
                                 opJson = GA.openPositions(symbol)
                                 positionId = opJson['data']['list'][0]['positionId']
                                 price = int(opJson['data']['list'][0]['price']) + price_range
-                                stop_price = int(opJson['data']['list'][0]['price']) + price_range * 12
+                                # stop_price = int(opJson['data']['list'][0]['price']) + price_range * 12
                                 logger.info("End  : get open positions.")
 
                                 time.sleep(1)
@@ -240,12 +240,12 @@ def execLeveregeTrade(ex_cd,symbol):
                                 coJson = GA.closeOrder(symbol, "SELL", price, positionId, coin_size, "LIMIT")
                                 logger.info("End  : Sell close order.")
 
-                                time.sleep(1)
+                                # time.sleep(1)
 
                                 # 売り逆指値決済注文
-                                logger.info("Start: Sell close order.")
-                                coJson = GA.closeOrder(symbol, "SELL", stop_price, positionId, coin_size, "STOP")
-                                logger.info("End  : Sell close order.")
+                                # logger.info("Start: Sell close order.")
+                                # coJson = GA.closeOrder(symbol, "SELL", stop_price, positionId, coin_size, "STOP")
+                                # logger.info("End  : Sell close order.")
                             # 下降予想の場合
                             elif last_judg < 0:
                                 # 売り成行注文
@@ -271,12 +271,12 @@ def execLeveregeTrade(ex_cd,symbol):
                                 coJson = GA.closeOrder(symbol, "BUY", price, positionId, coin_size, "LIMIT")
                                 logger.info("End  : Buy close order.")
 
-                                time.sleep(1)
+                                # time.sleep(1)
 
                                 # 買い逆指値決済注文
-                                logger.info("Start: Buy close order.")
-                                coJson = GA.closeOrder(symbol, "BUY", stop_price, positionId, coin_size, "STOP")
-                                logger.info("End  : Buy close order.")
+                                # logger.info("Start: Buy close order.")
+                                # coJson = GA.closeOrder(symbol, "BUY", stop_price, positionId, coin_size, "STOP")
+                                # logger.info("End  : Buy close order.")
                             else:
                                 # 予想できない場合は取引しない
                                 logger.info("Unexpected because the judgment index is 0.")
