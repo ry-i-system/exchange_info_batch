@@ -1,0 +1,1 @@
+UPDATE eip_trade_config SET price_range = 1200

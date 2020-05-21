@@ -159,8 +159,7 @@ def execLeveregeTrade(ex_cd,symbol):
             #            bid_dict['30m'] + bid_dict['60m'] + bid_dict['120m'] + bid_dict['240m'] + \
             #            bid_dict['720m'] + bid_dict['1440m'] + bid_dict['2880m']
             last_judg = last_ud['5m'] + last_ud['10m'] + last_ud['15m'] + \
-                       last_ud['30m'] + last_ud['60m'] + last_ud['120m'] + last_ud['240m'] + \
-                       last_ud['720m'] + last_ud['1440m'] + last_ud['2880m']
+                       last_ud['30m'] + last_ud['60m']
             # logger.info("Ask judgment : " + str(ask_judg))
             # logger.info("Bid judgment : " + str(bid_judg))
             logger.info("Last judgment : " + str(last_judg))
@@ -233,6 +232,8 @@ def execLeveregeTrade(ex_cd,symbol):
                                 price = int(opJson['data']['list'][0]['price']) + price_range
                                 logger.info("End  : get open positions.")
 
+                                time.sleep(1)
+
                                 # 売り指値決済注文
                                 logger.info("Start: Sell close order.")
                                 coJson = GA.closeOrder(symbol, "SELL", price, positionId, coin_size)
@@ -253,6 +254,8 @@ def execLeveregeTrade(ex_cd,symbol):
                                 positionId = opJson['data']['list'][0]['positionId']
                                 price = int(opJson['data']['list'][0]['price']) - price_range
                                 logger.info("End  : get open positions.")
+
+                                time.sleep(1)
 
                                 # 買い指値決済注文
                                 logger.info("Start: Buy close order.")
