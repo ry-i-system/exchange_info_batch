@@ -202,6 +202,8 @@ def execLeveregeTrade(ex_cd,symbol):
             spread = int(res[0][3])
             # 取引範囲
             price_range = int(res[0][4])
+            # 余力下限
+            available_amount = int(res[0][5])
             logger.info("End  : DB connection.")
 
             # 建玉がなければ正
@@ -209,7 +211,7 @@ def execLeveregeTrade(ex_cd,symbol):
                 # 拘束証拠金が0であれば正
                 if margin == 0:
                     # 余力が10000以上であれば正
-                    if availableAmount >= 10000:
+                    if availableAmount >= available_amount:
                         # 最新レートのスプレッドが設定値以内であれば正
                         if latest_spread >= -spread and latest_spread <= spread:
                             # レバレッジ取引開始
@@ -266,7 +268,7 @@ def execLeveregeTrade(ex_cd,symbol):
                             logger.info("The spread is not within -" + str(spread) + " ~ " + str(spread) + ".")
                     else:
                         # 余力が10000以下の場合、取引しない
-                        logger.info("Trading capacity (availableAmount) is below 10,000.")
+                        logger.info("Trading capacity (availableAmount) is below " + str(available_amount) + ".")
                 else:
                     # 拘束証拠金が0出ない場合、取引しない
                     logger.info("Detention margin is not 0.")
