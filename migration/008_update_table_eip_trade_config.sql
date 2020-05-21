@@ -1,0 +1,1 @@
+UPDATE eip_trade_config SET available_amount = 10000

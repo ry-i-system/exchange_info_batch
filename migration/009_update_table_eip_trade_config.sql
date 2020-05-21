@@ -1,0 +1,1 @@
+UPDATE eip_trade_config SET coin_size = 0.03, price_range = 2500

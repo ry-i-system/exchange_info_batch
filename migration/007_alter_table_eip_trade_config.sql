@@ -1,0 +1,1 @@
+ALTER TABLE eip_trade_config ADD available_amount INT NOT NULL
