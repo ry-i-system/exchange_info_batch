@@ -113,8 +113,8 @@ class GmoApi(object):
         data = response.json()
         return data
 
-    # 指値決済注文
-    def closeOrder(symbol, side, price, positionId, size):
+    # 決済注文
+    def closeOrder(symbol, side, price, positionId, size, executionType):
         endPoint  = EC.priUrl
         apiKey    = EC.apiKey
         secretKey = EC.secretKey
@@ -124,7 +124,7 @@ class GmoApi(object):
         reqBody = {
             "symbol": symbol,
             "side": side,
-            "executionType": "LIMIT",
+            "executionType": executionType,
             "price": price,
             "settlePosition": [
                 {
