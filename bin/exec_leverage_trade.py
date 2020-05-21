@@ -204,7 +204,7 @@ def execLeveregeTrade(ex_cd,symbol):
             # 余力下限
             available_amount = int(res[0][5])
             # ロスカット指数
-            losscut_index = int(res[0][6])
+            # losscut_index = int(res[0][6])
             logger.info("End  : DB connection.")
 
             # 建玉がなければ正
@@ -233,7 +233,7 @@ def execLeveregeTrade(ex_cd,symbol):
                                 positionId = opJson['data']['list'][0]['positionId']
                                 price = int(opJson['data']['list'][0]['price']) + price_range
                                 # stop_price = int(opJson['data']['list'][0]['price']) + price_range * losscut_index
-                                losscut_price = int(opJson['data']['list'][0]['price']) + price_range * losscut_index
+                                # losscut_price = int(opJson['data']['list'][0]['price']) + price_range * losscut_index
                                 logger.info("End  : get open positions.")
 
                                 time.sleep(1)
@@ -251,9 +251,9 @@ def execLeveregeTrade(ex_cd,symbol):
                                 # logger.info("End  : Sell close order.")
 
                                 # ロスカットレート変更
-                                logger.info("Start: Change losscut price.")
-                                clpJson = GA.changeLosscutPrice(positionId, losscut_price)
-                                logger.info("End  : Change losscut price.")
+                                # logger.info("Start: Change losscut price.")
+                                # clpJson = GA.changeLosscutPrice(positionId, losscut_price)
+                                # logger.info("End  : Change losscut price.")
                             # 下降予想の場合
                             elif last_judg < 0:
                                 # 売り成行注文
@@ -270,7 +270,7 @@ def execLeveregeTrade(ex_cd,symbol):
                                 positionId = opJson['data']['list'][0]['positionId']
                                 price = int(opJson['data']['list'][0]['price']) - price_range
                                 # stop_price = int(opJson['data']['list'][0]['price']) - price_range * losscut_index
-                                losscut_price = int(opJson['data']['list'][0]['price']) - price_range * losscut_index
+                                # losscut_price = int(opJson['data']['list'][0]['price']) - price_range * losscut_index
                                 logger.info("End  : get open positions.")
 
                                 time.sleep(1)
@@ -288,9 +288,9 @@ def execLeveregeTrade(ex_cd,symbol):
                                 # logger.info("End  : Buy close order.")
 
                                 # ロスカットレート変更
-                                logger.info("Start: Change losscut price.")
-                                clpJson = GA.changeLosscutPrice(positionId, losscut_price)
-                                logger.info("End  : Change losscut price.")
+                                # logger.info("Start: Change losscut price.")
+                                # clpJson = GA.changeLosscutPrice(positionId, losscut_price)
+                                # logger.info("End  : Change losscut price.")
                             else:
                                 # 予想できない場合は取引しない
                                 logger.info("Unexpected because the judgment index is 0.")

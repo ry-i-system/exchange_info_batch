@@ -8,16 +8,16 @@ sys.path.append(os.path.join(app_home,"lib"))
 # ../テスト対象のライブラリのロード
 from gmo_api import GmoApi as GA
 
-class TestOpenPositions(unittest.TestCase):
+class TestChangeLosscutPrice(unittest.TestCase):
 
-    def test_openPositions(self):
+    def test_changeLosscutPrice(self):
         # 想定結果
-        res_test = 43823821
+        res_test = {}
         # 実際の結果
-        res = GA.openPositions("BTC_JPY")
+        res = GA.changeLosscutPrice(43866884, 1030176)
 
         # テスト実行
-        self.assertEqual(res_test, res['data']['list'][0]['positionId'])
+        self.assertEqual(res_test, res)
 
 if __name__ == '__main__':
     unittest.main()
