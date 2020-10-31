@@ -52,11 +52,11 @@ def moveLatestRateHis():
         
         # 履歴テーブルにデータコピーSQL
         sql = "INSERT INTO eip_latest_rate_his SELECT * FROM eip_latest_rate WHERE datetime < CURRENT_TIMESTAMP + INTERVAL - 3 DAY"
-        res = DA.dbAccess(sql, val)
+        res = DA.dbMigrate(sql)
 
         # コピーしたデータ削除SQL
         sql = "DELETE FROM eip_latest_rate WHERE datetime < CURRENT_TIMESTAMP + INTERVAL - 3 DAY"
-        res = DA.dbAccess(sql, val)
+        res = DA.dbMigrate(sql)
         logger.info("DB registration completed.")
 
         # 処理終了
