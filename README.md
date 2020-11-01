@@ -127,3 +127,9 @@ OK
 # Exec leverage trade every 10 seconds
 * * * * * for i in `seq 0 10 59`;do (sleep ${i}; cd /home/eib/exchange_info_batch/; . /home/eib/.local/share/virtualenvs/exchange_info_batch-xxx_xxxx/bin/activate; python bin/exec_leverage_trade.py -e "gmo" -s "BTC_JPY") & done;
 ```
+
+* 毎日00:05に履歴テーブルへのデータ移動を実行
+```shell
+# Move  the latest rate for history table every 1 day
+5 0 * * * cd /home/eib/exchange_info_batch/ && . /home/eib/.local/share/virtualenvs/exchange_info_batch-xxx_xxxx/bin/activate && python bin/move_latest_rate_his.py
+```
