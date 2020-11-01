@@ -9,6 +9,7 @@ import os
 import click
 import logging
 import time
+import math
 
 # 親ディレクトリをアプリケーションのホーム(${app_home})に設定
 app_home = os.path.abspath(os.path.join( os.path.dirname(os.path.abspath(__file__)) , ".." ))
@@ -184,7 +185,8 @@ def execLeveregeTrade(ex_cd,symbol):
                                 opJson = GA.openPositions(symbol)
                                 positionId = opJson['data']['list'][0]['positionId']
                                 price = int(opJson['data']['list'][0]['price']) + price_range
-                                stop_price = int(opJson['data']['list'][0]['price']) - (price_range * losscut_index)
+                                losscutPrice = math.ceil(int(opJson['data']['list'][0]['price']) - ((int(opJson['data']['list'][0]['price']) / 4) /2))
+                                # stop_price = int(opJson['data']['list'][0]['price']) - (price_range * losscut_index)
                                 logger.info("End  : get open positions.")
 
                                 time.sleep(1)
@@ -196,10 +198,10 @@ def execLeveregeTrade(ex_cd,symbol):
 
                                 time.sleep(1)
 
-                                # 売り逆指値決済注文
-                                logger.info("Start: Sell close order.")
-                                coJson = GA.closeBulkOrder(symbol, "SELL", stop_price, positionId, coin_size, "STOP")
-                                logger.info("End  : Sell close order.")
+                                # ロスカットレート変更
+                                logger.info("Start: Change losscut price.")
+                                coJson = GA.closeBulkOrder(positionId, losscutPrice)
+                                logger.info("End  : Change losscut price.")
 
                             # 下降予想の場合
                             elif last_judg < 0:
@@ -214,7 +216,8 @@ def execLeveregeTrade(ex_cd,symbol):
                                 opJson = GA.openPositions(symbol)
                                 positionId = opJson['data']['list'][0]['positionId']
                                 price = int(opJson['data']['list'][0]['price']) - price_range
-                                stop_price = int(opJson['data']['list'][0]['price']) + (price_range * losscut_index)
+                                losscutPrice = math.ceil(int(opJson['data']['list'][0]['price']) + ((int(opJson['data']['list'][0]['price']) / 4) /2))
+                                # stop_price = int(opJson['data']['list'][0]['price']) + (price_range * losscut_index)
                                 logger.info("End  : get open positions.")
 
                                 time.sleep(1)
@@ -226,10 +229,10 @@ def execLeveregeTrade(ex_cd,symbol):
 
                                 time.sleep(1)
 
-                                # 買い逆指値決済注文
-                                logger.info("Start: Buy close order.")
-                                coJson = GA.closeBulkOrder(symbol, "BUY", stop_price, positionId, coin_size, "STOP")
-                                logger.info("End  : Buy close order.")
+                                # ロスカットレート変更
+                                logger.info("Start: Change losscut price.")
+                                coJson = GA.closeBulkOrder(positionId, losscutPrice)
+                                logger.info("End  : Change losscut price.")
 
                             else:
                                 # 予想できない場合は取引しない
@@ -253,7 +256,8 @@ def execLeveregeTrade(ex_cd,symbol):
                         # 建玉取得
                         positionId = opJson['data']['list'][0]['positionId']
                         price = int(opJson['data']['list'][0]['price']) + price_range
-                        stop_price = int(opJson['data']['list'][0]['price']) - (price_range * losscut_index)
+                        losscutPrice = math.ceil(int(opJson['data']['list'][0]['price']) - ((int(opJson['data']['list'][0]['price']) / 4) /2))
+                        # stop_price = int(opJson['data']['list'][0]['price']) - (price_range * losscut_index)
 
                         time.sleep(1)
 
@@ -264,15 +268,16 @@ def execLeveregeTrade(ex_cd,symbol):
 
                         time.sleep(1)
 
-                        # 売り逆指値決済注文
-                        logger.info("Start: Sell close order.")
-                        coJson = GA.closeBulkOrder(symbol, "SELL", stop_price, positionId, coin_size, "STOP")
-                        logger.info("End  : Sell close order.")
+                        # ロスカットレート変更
+                        logger.info("Start: Change losscut price.")
+                        coJson = GA.closeBulkOrder(positionId, losscutPrice)
+                        logger.info("End  : Change losscut price.")
                     # 下降予想の場合
                     elif last_judg < 0:
                         positionId = opJson['data']['list'][0]['positionId']
                         price = int(opJson['data']['list'][0]['price']) - price_range
-                        stop_price = int(opJson['data']['list'][0]['price']) + (price_range * losscut_index)
+                        losscutPrice = math.ceil(int(opJson['data']['list'][0]['price']) + ((int(opJson['data']['list'][0]['price']) / 4) /2))
+                        # stop_price = int(opJson['data']['list'][0]['price']) + (price_range * losscut_index)
 
                         time.sleep(1)
 
@@ -283,10 +288,10 @@ def execLeveregeTrade(ex_cd,symbol):
 
                         time.sleep(1)
 
-                        # 買い逆指値決済注文
-                        logger.info("Start: Buy close order.")
-                        coJson = GA.closeBulkOrder(symbol, "BUY", stop_price, positionId, coin_size, "STOP")
-                        logger.info("End  : Buy close order.")
+                        # ロスカットレート変更
+                        logger.info("Start: Change losscut price.")
+                        coJson = GA.closeBulkOrder(positionId, losscutPrice)
+                        logger.info("End  : Change losscut price.")
                 else:
                     # 建玉がある場合、取引しない
                     logger.info("There is an open position.")
