@@ -85,6 +85,31 @@ class GmoApi(object):
         data = response.json()
         return data
 
+    # 有効注文一覧取得
+    def activeOrders(symbol):
+        endPoint  = EC.priUrl
+        apiKey    = EC.apiKey
+        secretKey = EC.secretKey
+        timestamp = '{0}000'.format(int(time.mktime(datetime.now().timetuple())))
+        method = 'GET'
+        path = '/v1/activeOrders'
+        text = timestamp + method + path
+        sign = hmac.new(bytes(secretKey.encode('ascii')), bytes(text.encode('ascii')), hashlib.sha256).hexdigest()
+
+        parameters = {
+            "symbol": symbol,
+            "page": 1,
+            "count": 100
+        }
+        headers = {
+            "API-KEY": apiKey,
+            "API-TIMESTAMP": timestamp,
+            "API-SIGN": sign
+        }
+        response = requests.get(endPoint + path, headers=headers, params=parameters)
+        data = response.json()
+        return data
+
     # 成行注文
     def openOrder(symbol, side, size):
         endPoint  = EC.priUrl

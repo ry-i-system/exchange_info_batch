@@ -192,6 +192,22 @@ def execLeveregeTrade(ex_cd,symbol):
             opNone = {}
             logger.info("End  : get open positions.")
 
+            # 有効注文一覧取得
+            logger.info("Start: get active orders.")
+            apJson = GA.activeOrders(symbol)
+            apNone = {}
+            logger.info("End  : get active orders.")
+
+            # 決済注文があるかチェック
+            close_flag = 0
+            if apJson['data'] != apNone:
+                for i in apJson['data']['list']:
+                    if i['settleType'] == 'CLOSE':
+                        close_flag = 1
+                        break
+                    else:
+                        continue
+
             # 取引設定取得
             logger.info("Start: DB connection.")
             res = DA.dbSelect("SELECT * FROM eip_trade_config")
@@ -306,8 +322,28 @@ def execLeveregeTrade(ex_cd,symbol):
                     # 拘束証拠金が0出ない場合、取引しない
                     logger.info("Detention margin is not 0.")
             else:
-                # 建玉がある場合、取引しない
-                logger.info("There is an open position.")
+                # 決済注文がなければ入れる
+                if close_flag = 0:
+                    # 上昇予想の場合
+                    if last_judg > 0:
+                        # 建玉取得
+                        positionId = opJson['data']['list'][0]['positionId']
+                        price = int(opJson['data']['list'][0]['price']) + price_range
+                        # 売り指値決済注文
+                        logger.info("Start: Sell close order.")
+                        coJson = GA.closeOrder(symbol, "SELL", price, positionId, coin_size, "LIMIT")
+                        logger.info("End  : Sell close order.")
+                    # 下降予想の場合
+                    elif last_judg < 0:
+                        positionId = opJson['data']['list'][0]['positionId']
+                        price = int(opJson['data']['list'][0]['price']) - price_range
+                        # 買い指値決済注文
+                        logger.info("Start: Buy close order.")
+                        coJson = GA.closeOrder(symbol, "BUY", price, positionId, coin_size, "LIMIT")
+                        logger.info("End  : Buy close order.")
+                else:
+                    # 建玉がある場合、取引しない
+                    logger.info("There is an open position.")
         else:
             # 取引所がOPENでない
             logger.info("The exchange is not open.")
