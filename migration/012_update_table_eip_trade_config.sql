@@ -1,1 +1,1 @@
-UPDATE eip_trade_config SET losscut_index = 12
+UPDATE eip_trade_config SET losscut_index = 5
