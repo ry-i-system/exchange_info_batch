@@ -186,17 +186,23 @@ def execLeveregeTrade(ex_cd,symbol):
             logger.info("ProfitLoss       : " + str(aaJson['data']['profitLoss']))
             logger.info("End  : get available amount.")
 
+            time.sleep(3)
+
             # 建玉一覧取得
             logger.info("Start: get open positions.")
             opJson = GA.openPositions(symbol)
             opNone = {}
             logger.info("End  : get open positions.")
 
+            time.sleep(3)
+
             # 有効注文一覧取得
             logger.info("Start: get active orders.")
             apJson = GA.activeOrders(symbol)
             apNone = {}
             logger.info("End  : get active orders.")
+
+            time.sleep(3)
 
             # 取引設定取得
             logger.info("Start: DB connection.")
@@ -231,6 +237,8 @@ def execLeveregeTrade(ex_cd,symbol):
                                 ooJson = GA.openOrder(symbol, "BUY", coin_size)
                                 logger.info("End  : Buy order.")
 
+                                time.sleep(3)
+
                                 # 建玉取得
                                 logger.info("Start: get open positions.")
                                 opJson = GA.openPositions(symbol)
@@ -240,10 +248,14 @@ def execLeveregeTrade(ex_cd,symbol):
                                 # losscut_price = int(opJson['data']['list'][0]['price']) + price_range * losscut_index
                                 logger.info("End  : get open positions.")
 
+                                time.sleep(3)
+
                                 # 売り指値決済注文
                                 logger.info("Start: Sell close order.")
                                 coJson = GA.closeOrder(symbol, "SELL", price, positionId, coin_size, "LIMIT")
                                 logger.info("End  : Sell close order.")
+
+                                time.sleep(3)
 
                                 # 売り逆指値決済注文
                                 logger.info("Start: Sell close order.")
@@ -262,6 +274,8 @@ def execLeveregeTrade(ex_cd,symbol):
                                 ooJson = GA.openOrder(symbol, "SELL", coin_size)
                                 logger.info("End  : Sell order.")
 
+                                time.sleep(3)
+
                                 # 建玉取得
                                 logger.info("Start: get open positions.")
                                 opJson = GA.openPositions(symbol)
@@ -271,10 +285,14 @@ def execLeveregeTrade(ex_cd,symbol):
                                 # losscut_price = int(opJson['data']['list'][0]['price']) - price_range * losscut_index
                                 logger.info("End  : get open positions.")
 
+                                time.sleep(3)
+
                                 # 買い指値決済注文
                                 logger.info("Start: Buy close order.")
                                 coJson = GA.closeOrder(symbol, "BUY", price, positionId, coin_size, "LIMIT")
                                 logger.info("End  : Buy close order.")
+
+                                time.sleep(3)
 
                                 # 買い逆指値決済注文
                                 logger.info("Start: Buy close order.")
@@ -309,10 +327,14 @@ def execLeveregeTrade(ex_cd,symbol):
                         price = int(opJson['data']['list'][0]['price']) + price_range
                         stop_price = int(opJson['data']['list'][0]['price']) + price_range * losscut_index
 
+                        time.sleep(3)
+
                         # 売り指値決済注文
                         logger.info("Start: Sell close order.")
                         coJson = GA.closeOrder(symbol, "SELL", price, positionId, coin_size, "LIMIT")
                         logger.info("End  : Sell close order.")
+
+                        time.sleep(3)
 
                         # 売り逆指値決済注文
                         logger.info("Start: Sell close order.")
@@ -324,10 +346,14 @@ def execLeveregeTrade(ex_cd,symbol):
                         price = int(opJson['data']['list'][0]['price']) - price_range
                         stop_price = int(opJson['data']['list'][0]['price']) - price_range * losscut_index
 
+                        time.sleep(3)
+
                         # 買い指値決済注文
                         logger.info("Start: Buy close order.")
                         coJson = GA.closeOrder(symbol, "BUY", price, positionId, coin_size, "LIMIT")
                         logger.info("End  : Buy close order.")
+
+                        time.sleep(3)
 
                         # 買い逆指値決済注文
                         logger.info("Start: Buy close order.")
