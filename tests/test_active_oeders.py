@@ -17,7 +17,7 @@ class TestActiveOrders(unittest.TestCase):
         res = GA.activeOrders("BTC_JPY")
 
         # テスト実行
-        self.assertEqual(res_test, res)
+        self.assertEqual(res_test, res['data'])
 
 if __name__ == '__main__':
     unittest.main()
