@@ -198,16 +198,6 @@ def execLeveregeTrade(ex_cd,symbol):
             apNone = {}
             logger.info("End  : get active orders.")
 
-            # 決済注文があるかチェック
-            close_flag = 0
-            if apJson['data'] != apNone:
-                for i in apJson['data']['list']:
-                    if i['settleType'] == 'CLOSE':
-                        close_flag = 1
-                        break
-                    else:
-                        continue
-
             # 取引設定取得
             logger.info("Start: DB connection.")
             res = DA.dbSelect("SELECT * FROM eip_trade_config")
@@ -323,7 +313,7 @@ def execLeveregeTrade(ex_cd,symbol):
                     logger.info("Detention margin is not 0.")
             else:
                 # 決済注文がなければ入れる
-                if close_flag == 0:
+                if apJson['data'] == apNone:
                     # 上昇予想の場合
                     if last_judg > 0:
                         # 建玉取得
