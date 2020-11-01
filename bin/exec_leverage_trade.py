@@ -216,7 +216,7 @@ def execLeveregeTrade(ex_cd,symbol):
             # 余力下限
             available_amount = int(res[0][5])
             # ロスカット指数
-            # losscut_index = int(res[0][6])
+            losscut_index = int(res[0][6])
             logger.info("End  : DB connection.")
 
             # 建玉がなければ正
