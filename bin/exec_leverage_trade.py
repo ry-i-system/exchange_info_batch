@@ -244,7 +244,7 @@ def execLeveregeTrade(ex_cd,symbol):
                                 opJson = GA.openPositions(symbol)
                                 positionId = opJson['data']['list'][0]['positionId']
                                 price = int(opJson['data']['list'][0]['price']) + price_range
-                                stop_price = int(opJson['data']['list'][0]['price']) - price_range * losscut_index
+                                stop_price = int(opJson['data']['list'][0]['price']) - (price_range * losscut_index)
                                 # losscut_price = int(opJson['data']['list'][0]['price']) + price_range * losscut_index
                                 logger.info("End  : get open positions.")
 
@@ -281,7 +281,7 @@ def execLeveregeTrade(ex_cd,symbol):
                                 opJson = GA.openPositions(symbol)
                                 positionId = opJson['data']['list'][0]['positionId']
                                 price = int(opJson['data']['list'][0]['price']) - price_range
-                                stop_price = int(opJson['data']['list'][0]['price']) + price_range * losscut_index
+                                stop_price = int(opJson['data']['list'][0]['price']) + (price_range * losscut_index)
                                 # losscut_price = int(opJson['data']['list'][0]['price']) - price_range * losscut_index
                                 logger.info("End  : get open positions.")
 
@@ -325,7 +325,7 @@ def execLeveregeTrade(ex_cd,symbol):
                         # 建玉取得
                         positionId = opJson['data']['list'][0]['positionId']
                         price = int(opJson['data']['list'][0]['price']) + price_range
-                        stop_price = int(opJson['data']['list'][0]['price']) - price_range * losscut_index
+                        stop_price = int(opJson['data']['list'][0]['price']) - (price_range * losscut_index)
 
                         time.sleep(3)
 
@@ -344,7 +344,7 @@ def execLeveregeTrade(ex_cd,symbol):
                     elif last_judg < 0:
                         positionId = opJson['data']['list'][0]['positionId']
                         price = int(opJson['data']['list'][0]['price']) - price_range
-                        stop_price = int(opJson['data']['list'][0]['price']) + price_range * losscut_index
+                        stop_price = int(opJson['data']['list'][0]['price']) + (price_range * losscut_index)
 
                         time.sleep(3)
 
