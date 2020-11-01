@@ -85,6 +85,29 @@ class GmoApi(object):
         data = response.json()
         return data
 
+    # 建玉サマリー取得
+    def positionSummary(symbol):
+        endPoint  = EC.priUrl
+        apiKey    = EC.apiKey
+        secretKey = EC.secretKey
+        timestamp = '{0}000'.format(int(time.mktime(datetime.now().timetuple())))
+        method = 'GET'
+        path = '/v1/positionSummary'
+        text = timestamp + method + path
+        sign = hmac.new(bytes(secretKey.encode('ascii')), bytes(text.encode('ascii')), hashlib.sha256).hexdigest()
+
+        parameters = {
+            "symbol": symbol
+        }
+        headers = {
+            "API-KEY": apiKey,
+            "API-TIMESTAMP": timestamp,
+            "API-SIGN": sign
+        }
+        response = requests.get(endPoint + path, headers=headers, params=parameters)
+        data = response.json()
+        return data
+
     # 有効注文一覧取得
     def activeOrders(symbol):
         endPoint  = EC.priUrl
@@ -173,7 +196,7 @@ class GmoApi(object):
         return data
 
     # 一括決済注文
-    def closeBulkOrder(symbol, side, price, positionId, size, executionType):
+    def closeBulkOrder(symbol, side, price, size, executionType):
         endPoint  = EC.priUrl
         apiKey    = EC.apiKey
         secretKey = EC.secretKey
@@ -201,6 +224,34 @@ class GmoApi(object):
         data = response.json()
         return data
 
+    # 一括決済注文
+    def closeBulkOrderMarket(symbol, side, size, executionType):
+        endPoint  = EC.priUrl
+        apiKey    = EC.apiKey
+        secretKey = EC.secretKey
+        timestamp = '{0}000'.format(int(time.mktime(datetime.now().timetuple())))
+        method    = 'POST'
+        path      = '/v1/closeBulkOrder'
+        reqBody = {
+            "symbol": symbol,
+            "side": side,
+            "executionType": executionType,
+            "size": size
+        }
+
+        text = timestamp + method + path + json.dumps(reqBody)
+        sign = hmac.new(bytes(secretKey.encode('ascii')), bytes(text.encode('ascii')), hashlib.sha256).hexdigest()
+
+        headers = {
+            "API-KEY": apiKey,
+            "API-TIMESTAMP": timestamp,
+            "API-SIGN": sign
+        }
+
+        response = requests.post(endPoint + path, headers=headers, data=json.dumps(reqBody))
+        data = response.json()
+        return data
+
     # ロスカットレート変更
     def changeLosscutPrice(positionId, losscutPrice):
         endPoint  = EC.priUrl
@@ -212,6 +263,31 @@ class GmoApi(object):
         reqBody = {
             "positionId": positionId,
             "losscutPrice": losscutPrice
+        }
+
+        text = timestamp + method + path + json.dumps(reqBody)
+        sign = hmac.new(bytes(secretKey.encode('ascii')), bytes(text.encode('ascii')), hashlib.sha256).hexdigest()
+
+        headers = {
+            "API-KEY": apiKey,
+            "API-TIMESTAMP": timestamp,
+            "API-SIGN": sign
+        }
+
+        response = requests.post(endPoint + path, headers=headers, data=json.dumps(reqBody))
+        data = response.json()
+        return data
+
+    # 注文キャンセル
+    def cancelOrder(orderId):
+        endPoint  = EC.priUrl
+        apiKey    = EC.apiKey
+        secretKey = EC.secretKey
+        timestamp = '{0}000'.format(int(time.mktime(datetime.now().timetuple())))
+        method    = 'POST'
+        path      = '/v1/cancelOrder'
+        reqBody = {
+            "orderId": orderId
         }
 
         text = timestamp + method + path + json.dumps(reqBody)
