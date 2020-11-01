@@ -172,6 +172,35 @@ class GmoApi(object):
         data = response.json()
         return data
 
+    # 一括決済注文
+    def closeBulkOrder(symbol, side, price, positionId, size, executionType):
+        endPoint  = EC.priUrl
+        apiKey    = EC.apiKey
+        secretKey = EC.secretKey
+        timestamp = '{0}000'.format(int(time.mktime(datetime.now().timetuple())))
+        method    = 'POST'
+        path      = '/v1/closeBulkOrder'
+        reqBody = {
+            "symbol": symbol,
+            "side": side,
+            "executionType": executionType,
+            "price": price,
+            "size": size
+        }
+
+        text = timestamp + method + path + json.dumps(reqBody)
+        sign = hmac.new(bytes(secretKey.encode('ascii')), bytes(text.encode('ascii')), hashlib.sha256).hexdigest()
+
+        headers = {
+            "API-KEY": apiKey,
+            "API-TIMESTAMP": timestamp,
+            "API-SIGN": sign
+        }
+
+        response = requests.post(endPoint + path, headers=headers, data=json.dumps(reqBody))
+        data = response.json()
+        return data
+
     # ロスカットレート変更
     def changeLosscutPrice(positionId, losscutPrice):
         endPoint  = EC.priUrl

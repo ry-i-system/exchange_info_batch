@@ -252,14 +252,14 @@ def execLeveregeTrade(ex_cd,symbol):
 
                                 # 売り指値決済注文
                                 logger.info("Start: Sell close order.")
-                                coJson = GA.closeOrder(symbol, "SELL", price, positionId, coin_size, "LIMIT")
+                                coJson = GA.closeBulkOrder(symbol, "SELL", price, positionId, coin_size, "LIMIT")
                                 logger.info("End  : Sell close order.")
 
                                 time.sleep(3)
 
                                 # 売り逆指値決済注文
                                 logger.info("Start: Sell close order.")
-                                coJson = GA.closeOrder(symbol, "SELL", stop_price, positionId, coin_size, "STOP")
+                                coJson = GA.closeBulkOrder(symbol, "SELL", stop_price, positionId, coin_size, "STOP")
                                 logger.info("End  : Sell close order.")
 
                                 # ロスカットレート変更
@@ -289,14 +289,14 @@ def execLeveregeTrade(ex_cd,symbol):
 
                                 # 買い指値決済注文
                                 logger.info("Start: Buy close order.")
-                                coJson = GA.closeOrder(symbol, "BUY", price, positionId, coin_size, "LIMIT")
+                                coJson = GA.closeBulkOrder(symbol, "BUY", price, positionId, coin_size, "LIMIT")
                                 logger.info("End  : Buy close order.")
 
                                 time.sleep(3)
 
                                 # 買い逆指値決済注文
                                 logger.info("Start: Buy close order.")
-                                coJson = GA.closeOrder(symbol, "BUY", stop_price, positionId, coin_size, "STOP")
+                                coJson = GA.closeBulkOrder(symbol, "BUY", stop_price, positionId, coin_size, "STOP")
                                 logger.info("End  : Buy close order.")
 
                                 # ロスカットレート変更
@@ -331,14 +331,14 @@ def execLeveregeTrade(ex_cd,symbol):
 
                         # 売り指値決済注文
                         logger.info("Start: Sell close order.")
-                        coJson = GA.closeOrder(symbol, "SELL", price, positionId, coin_size, "LIMIT")
+                        coJson = GA.closeBulkOrder(symbol, "SELL", price, positionId, coin_size, "LIMIT")
                         logger.info("End  : Sell close order.")
 
                         time.sleep(3)
 
                         # 売り逆指値決済注文
                         logger.info("Start: Sell close order.")
-                        coJson = GA.closeOrder(symbol, "SELL", stop_price, positionId, coin_size, "STOP")
+                        coJson = GA.closeBulkOrder(symbol, "SELL", stop_price, positionId, coin_size, "STOP")
                         logger.info("End  : Sell close order.")
                     # 下降予想の場合
                     elif last_judg < 0:
@@ -350,14 +350,14 @@ def execLeveregeTrade(ex_cd,symbol):
 
                         # 買い指値決済注文
                         logger.info("Start: Buy close order.")
-                        coJson = GA.closeOrder(symbol, "BUY", price, positionId, coin_size, "LIMIT")
+                        coJson = GA.closeBulkOrder(symbol, "BUY", price, positionId, coin_size, "LIMIT")
                         logger.info("End  : Buy close order.")
 
                         time.sleep(3)
 
                         # 買い逆指値決済注文
                         logger.info("Start: Buy close order.")
-                        coJson = GA.closeOrder(symbol, "BUY", stop_price, positionId, coin_size, "STOP")
+                        coJson = GA.closeBulkOrder(symbol, "BUY", stop_price, positionId, coin_size, "STOP")
                         logger.info("End  : Buy close order.")
                 else:
                     # 建玉がある場合、取引しない
