@@ -323,7 +323,7 @@ def execLeveregeTrade(ex_cd,symbol):
                     logger.info("Detention margin is not 0.")
             else:
                 # 決済注文がなければ入れる
-                if close_flag = 0:
+                if close_flag == 0:
                     # 上昇予想の場合
                     if last_judg > 0:
                         # 建玉取得
