@@ -300,7 +300,7 @@ def execLeveregeTrade(ex_cd,symbol):
                     coin_size = psJson['data']['list'][0]['sumPositionQuantity']
 
                     # 損失が大きい場合は注文キャンセル
-                    if lossGain < (price_range / 4) * -1:
+                    if lossGain < -150:
                         logger.info("Start: Cancel order.")
                         for i in apJson['data']['list']:
                             GA.cancelOrder(i['orderId'])
