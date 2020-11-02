@@ -184,7 +184,7 @@ def execLeveregeTrade(ex_cd,symbol):
                                 logger.info("Start: get open positions.")
                                 opJson = GA.openPositions(symbol)
                                 # positionId = opJson['data']['list'][0]['positionId']
-                                price = int(opJson['data']['list'][0]['price']) + price_range
+                                price = int(opJson['data']['list'][0]['price']) + (price_range * 2)
                                 # losscutPrice = math.ceil(int(opJson['data']['list'][0]['price']) - ((int(opJson['data']['list'][0]['price']) / 4) /2))
                                 # stop_price = int(opJson['data']['list'][0]['price']) - (price_range * losscut_index)
                                 logger.info("End  : get open positions.")
@@ -215,7 +215,7 @@ def execLeveregeTrade(ex_cd,symbol):
                                 logger.info("Start: get open positions.")
                                 opJson = GA.openPositions(symbol)
                                 # positionId = opJson['data']['list'][0]['positionId']
-                                price = int(opJson['data']['list'][0]['price']) - price_range
+                                price = int(opJson['data']['list'][0]['price']) - (price_range * 2)
                                 # losscutPrice = math.ceil(int(opJson['data']['list'][0]['price']) + ((int(opJson['data']['list'][0]['price']) / 4) /2))
                                 # stop_price = int(opJson['data']['list'][0]['price']) + (price_range * losscut_index)
                                 logger.info("End  : get open positions.")
@@ -255,7 +255,7 @@ def execLeveregeTrade(ex_cd,symbol):
                     if last_judg > 0:
                         # 建玉取得
                         # positionId = opJson['data']['list'][0]['positionId']
-                        price = int(opJson['data']['list'][0]['price']) + price_range
+                        price = int(opJson['data']['list'][0]['price']) + (price_range * 2)
                         # losscutPrice = math.ceil(int(opJson['data']['list'][0]['price']) - ((int(opJson['data']['list'][0]['price']) / 4) /2))
                         # stop_price = int(opJson['data']['list'][0]['price']) - (price_range * losscut_index)
 
@@ -275,7 +275,7 @@ def execLeveregeTrade(ex_cd,symbol):
                     # 下降予想の場合
                     elif last_judg < 0:
                         # positionId = opJson['data']['list'][0]['positionId']
-                        price = int(opJson['data']['list'][0]['price']) - price_range
+                        price = int(opJson['data']['list'][0]['price']) - (price_range * 2)
                         # losscutPrice = math.ceil(int(opJson['data']['list'][0]['price']) + ((int(opJson['data']['list'][0]['price']) / 4) /2))
                         # stop_price = int(opJson['data']['list'][0]['price']) + (price_range * losscut_index)
 
