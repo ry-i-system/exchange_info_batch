@@ -40,6 +40,13 @@ class GmoApi(object):
         data = response.json()
         return data
 
+    # 板情報取得
+    def orderbooks(symbol):
+        path = '/v1/orderbooks?symbol=' + symbol
+        response = requests.get(EC.pubUrl + path)
+        data = response.json()
+        return data
+
     # 余力情報取得
     def availableAmount():
         endPoint  = EC.priUrl
