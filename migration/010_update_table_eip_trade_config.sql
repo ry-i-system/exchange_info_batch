@@ -1,1 +1,1 @@
-UPDATE eip_trade_config SET price_range = 1500
+UPDATE eip_trade_config SET price_range = 2000
