@@ -67,7 +67,7 @@ def execLeveregeTrade(ex_cd,symbol):
             # DB接続
             logger.info("Start: DB connection.")
             # 過去データ取得SQL
-            sql = "SELECT avg(ask) as ask, avg(bid) as bid, avg(last) as last FROM eip_latest_rate WHERE datetime > CURRENT_TIMESTAMP + INTERVAL - 1 MINUTE \
+            sql = "SELECT avg(ask) as ask, avg(bid) as bid, avg(last) as last FROM eip_latest_rate WHERE datetime > CURRENT_TIMESTAMP + INTERVAL - 3 MINUTE \
                    UNION ALL \
                    SELECT avg(ask) as ask, avg(bid) as bid, avg(last) as last FROM eip_latest_rate WHERE datetime > CURRENT_TIMESTAMP + INTERVAL - 5 MINUTE \
                    UNION ALL \
@@ -96,22 +96,22 @@ def execLeveregeTrade(ex_cd,symbol):
             # UP/DOWN判定
             logger.info("Start: UP/DOWN judgment.")
             last_dict = {
-                '1m': float(res[0][2]) - latest_last,
+                '3m': float(res[0][2]) - latest_last,
                 '5m': float(res[1][2]) - latest_last,
                 '10m': float(res[2][2]) - latest_last,
                 '15m': float(res[3][2]) - latest_last,
                 '30m': float(res[4][2]) - latest_last
             }
             last_ud = {
-                '1m': -1 if last_dict['1m'] > 0 else 1 if last_dict['1m'] < 0 else 0,
+                '3m': -1 if last_dict['3m'] > 0 else 1 if last_dict['3m'] < 0 else 0,
                 '5m': -1 if last_dict['5m'] > 0 else 1 if last_dict['5m'] < 0 else 0,
                 '10m': -1 if last_dict['10m'] > 0 else 1 if last_dict['10m'] < 0 else 0,
                 '15m': -1 if last_dict['15m'] > 0 else 1 if last_dict['15m'] < 0 else 0,
                 '30m': -1 if last_dict['30m'] > 0 else 1 if last_dict['30m'] < 0 else 0
             }
-            last_judg = last_ud['1m'] + last_ud['5m'] + last_ud['10m'] + last_ud['15m'] + last_ud['30m']
+            last_judg = last_ud['3m'] + last_ud['5m'] + last_ud['10m'] + last_ud['15m'] + last_ud['30m']
             logger.info("Last judgment : " + str(last_judg))
-            logger.info("Last    1 minutes ago : " + str(last_ud['1m']))
+            logger.info("Last    3 minutes ago : " + str(last_ud['3m']))
             logger.info("Last    5 minutes ago : " + str(last_ud['5m']))
             logger.info("Last   10 minutes ago : " + str(last_ud['10m']))
             logger.info("Last   15 minutes ago : " + str(last_ud['15m']))
